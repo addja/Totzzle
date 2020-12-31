@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float speed = 10f;
+    public float timeOut = 10f;
+    public TimerManager timerManager;
 
     private Vector2 movementInput;
     private Rigidbody2D myRigidbody;
@@ -37,13 +39,27 @@ public class PlayerController : MonoBehaviour {
         Move(); 
     }
 
+    private void StartTimer( float time ) {
+        Debug.Log(  "Oh no, you're on point B. Hurry back to point A!" );
+        timerManager.StartTimer( time );
+    }
+
+    private void StopTimer() {
+        Debug.Log( "You're back on point A, go to point B" );
+        if ( !timerManager ) {
+            return; // We haven't started the timer yet
+        }
+
+        timerManager.StopTimer();
+    }
+
     private void OnTriggerEnter2D( Collider2D other ) {
         switch ( other.name ) {
             case "Point A":
-                Debug.Log( "You're back on point A, go to point B");
+                StopTimer();
                 break;
             case "Point B":
-                Debug.Log(  "Oh no, you're on point B. Hurry back to point A!" );
+                StartTimer( timeOut );
                 break;
             default:
                 Debug.Log( "Ignore " + other.name );
