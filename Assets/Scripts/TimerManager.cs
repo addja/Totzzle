@@ -1,38 +1,59 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class TimerManager : MonoBehaviour {
 
     public GameObject timerCanvas;
     public Text timerText;
     public Text countdownText;
+    public GameObject replayText;
 
-    private bool started = false;
+    private bool countdownStarted = false;
     private float timeLeft = 0f;
+    private bool gameOver = false;
+
+    public bool Started() {
+        return countdownStarted;
+    }
 
     public void StopTimer() {
         Debug.Log( "Stopped timer" );
-        timerCanvas.SetActive( false );
-        started = false;
+        gameOver = true;
+        timerText.text = "Congrats! You made it!";
+        countdownText.text = "";
+        replayText.SetActive( true );
     }
 
     public void StartTimer( float time ) {
-        if ( started ) {
+        if ( countdownStarted ) {
             return;
         }
 
         timeLeft = time;
         Debug.Log( "Started timer with timeout: " + timeLeft );
-        started = true;
+        countdownStarted = true;
         timerText.text = "Oh no! Go back to red!";
         countdownText.text = Mathf.CeilToInt( timeLeft ).ToString();
         timerCanvas.SetActive( true );
     }
 
+    public bool GameIsOver() {
+        return gameOver;
+    }
+
     private void Update() {
-        if ( !started ) {
+        if ( !countdownStarted ) {
+            return;
+        }
+        
+        if ( gameOver ) {
+            if ( Input.GetKeyDown( KeyCode.R ) ) {
+                // restart level
+                SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+            }
             return;
         }
 
@@ -46,7 +67,8 @@ public class TimerManager : MonoBehaviour {
 
     private void GameOver() {
         Debug.Log( "Game over" );
-        started = false;
+        gameOver = true;
         timerText.text = "you lost dude";
+        replayText.SetActive( true );
     }
-}
+} 

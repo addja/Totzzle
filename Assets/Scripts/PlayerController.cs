@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 
     private Vector2 movementInput;
     private Rigidbody2D myRigidbody;
+    private bool playerEnabled = true;
    
     private void Start() {
         movementInput = new Vector3( 0, 0, 0 );
@@ -17,6 +18,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void ReadInput() {
+        if ( !playerEnabled ) {
+            Debug.Log( "Player dead" );
+            movementInput = new Vector2( 0, 0 );
+            return;
+        }
         // a w s d keys to move the player
         // alternatively arrow keys
         movementInput = new Vector2( Input.GetAxisRaw( "Horizontal" ), Input.GetAxisRaw( "Vertical" ) );
@@ -31,7 +37,17 @@ public class PlayerController : MonoBehaviour {
         myRigidbody.position += Time.fixedDeltaTime * velocity;;
     }
 
+    private void CheckGameOver() {
+        if ( timerManager.GameIsOver() ) {
+            playerEnabled = false;
+        }
+    }
+
     private void Update() {
+        if ( !playerEnabled ) {
+            return;
+        }
+        CheckGameOver();
         ReadInput();
     }
 
@@ -46,7 +62,7 @@ public class PlayerController : MonoBehaviour {
 
     private void StopTimer() {
         Debug.Log( "You're back on point A, go to point B" );
-        if ( !timerManager ) {
+        if ( !timerManager.Started() ) {
             return; // We haven't started the timer yet
         }
 

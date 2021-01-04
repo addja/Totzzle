@@ -729,6 +729,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 247670823}
     - target: {fileID: 67526952691858252, guid: 404a5a6f995f4fe4db1810f9e39985b4, type: 3}
+      propertyPath: replayText
+      value: 
+      objectReference: {fileID: 2033010723}
+    - target: {fileID: 67526952691858252, guid: 404a5a6f995f4fe4db1810f9e39985b4, type: 3}
       propertyPath: timerCanvas
       value: 
       objectReference: {fileID: 790196293}
@@ -1161,6 +1165,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3835446589245418381, guid: 72c263ef8fbdff340b4327f43340026a, type: 3}
   m_PrefabInstance: {fileID: 776045754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2033010723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 413391823640373041, guid: 644e950bdecc32c44bb8a0aea14fd965, type: 3}
+  m_PrefabInstance: {fileID: 422743974}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2130043109
 PrefabInstance:
