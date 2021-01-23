@@ -9,11 +9,12 @@ public class GridMovement : MonoBehaviour
     public MapManager mapManager;
 
     bool isMoving;
+    bool gameOver = false;
     Vector2 origPosition, targetPosition;
 
     void Update()
     {
-        if (!isMoving)
+        if (!isMoving && !gameOver)
         {
             processInput();
         }
@@ -70,6 +71,8 @@ public class GridMovement : MonoBehaviour
             transform.position = targetPosition;
 
             isMoving = false;
+            mapManager.UpdateWorld();
+            gameOver = mapManager.IsGameOver((uint)targetPosition.x, (uint)targetPosition.y);
         }
     }
 }

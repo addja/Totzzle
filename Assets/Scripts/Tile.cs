@@ -19,9 +19,15 @@ public class Tile : MonoBehaviour
         {TileType.trigger, -2},
         {TileType.setter, -3},
     };
+    bool countDownNextTurn = false;
     bool countDownOn = false;
     uint counter = 0;
     TileType tileType;
+
+    public void StartCountdown()
+    {
+        countDownNextTurn = true;
+    }
 
     public void SetTile(char type)
     {
@@ -42,15 +48,39 @@ public class Tile : MonoBehaviour
                 break;
         }
 
-        int tileTypeAnimator = 0;
         if (counter != 0)
         {
-            tileTypeAnimator = (int)counter;
+            AnimateTile((int)counter);
         }
         else
         {
-            tileTypeAnimator = tileTypeAnimatorDic[tileType];
+            AnimateTile(tileTypeAnimatorDic[tileType]);
         }
+    }
+
+    public void UpdateTile()
+    {
+        if (countDownOn && counter != 0)
+        {
+            counter--;
+            if (counter == 0)
+            {
+                Destroy(gameObject);
+            }
+            AnimateTile((int)counter);
+        }
+
+        // TODO: Don't like this, need to think something elegant
+        countDownOn = countDownNextTurn;
+    }
+
+    void AnimateTile(int tileTypeAnimator)
+    {
         animator.SetInteger("tileTypeAnimator", tileTypeAnimator);
+    }
+
+    public bool BadTile()
+    {
+        return counter == 0 && tileType == TileType.countdown;
     }
 }
