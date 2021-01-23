@@ -6,10 +6,10 @@ public class MapManager : MonoBehaviour
 {
 
     public GameObject tilePrefab;
-    public int[,] tileMapBluePrint = {
-        { 1, 1, 1 },
-        { 1, 2, 1 },
-        { 1, 1, 1 },
+    public char[,] tileMapBluePrint = {
+        { '1','c','1' },
+        { 'a','2','b' },
+        { '1','1','1' },
     };
 
     GameObject[,] tileMap;
@@ -27,7 +27,7 @@ public class MapManager : MonoBehaviour
             for (uint y = 0; y < mapSizeY; y++)
             {
                 GameObject newTile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-                // newTile.property = tileMapBluePrint[i, j];
+                newTile.GetComponent< Tile >().SetTile(tileMapBluePrint[x, y]);
                 tileMap[x, y] = newTile;
             }
         }
