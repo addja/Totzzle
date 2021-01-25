@@ -2,58 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//[ExecuteInEditMode]
 public class MapManager : MonoBehaviour
 {
+    public GameObject grid;
 
-    public GameObject tilePrefab;
-    public char[,] tileMapBluePrint = {
-        { '1','c','1' },
-        { 'a','2','b' },
-        { '1','1','1' },
-    };
+    private Dictionary<string, Tile> tileMap = new Dictionary<string, Tile>();
 
-    GameObject[,] tileMap;
-    uint mapSizeX;
-    uint mapSizeY;
-    enum GameState
+    private enum GameState
     {
-        exploration, // go to point c
-        queueLoaded, // go to point b
+        exploration, // pre queueLoaded
+        queueLoaded, // ready to go to point b
         countdown // go to point a
     };
     private GameState gameState;
 
-    void Start()
+    private string TileIdentifier(int x, int y)
+    {
+        return x.ToString() + "/" + y.ToString();
+    }
+
+    private void Start()
     {
         gameState = GameState.exploration;
-        mapSizeX = (uint)tileMapBluePrint.GetLength(0);
-        mapSizeY = (uint)tileMapBluePrint.GetLength(1);
-        tileMap = new GameObject[mapSizeX, mapSizeY];
 
-        for (uint x = 0; x < mapSizeX; x++)
+        foreach (Tile tile in grid.GetComponentsInChildren<Tile>())
         {
-            for (uint y = 0; y < mapSizeY; y++)
-            {
-                GameObject newTile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-                newTile.GetComponent< Tile >().SetTile(tileMapBluePrint[x, y]);
-                tileMap[x, y] = newTile;
-            }
+            Vector3 tilePosition = tile.transform.position;
+            tileMap[TileIdentifier((int)tilePosition.x,(int)tilePosition.y)] = tile;
         }
     }
 
-    public bool CanMove(uint x, uint y)
+    public bool CanMove(int x, int y)
     {
-        if (x < mapSizeX && y < mapSizeY && tileMap.GetValue(x, y) != null)
+        Tile tile;
+        if (tileMap.TryGetValue(TileIdentifier(x, y), out tile) && tile != null)
         {
-            switch (tileMapBluePrint.GetValue(x, y))
+            switch (tile.type)
             {
-                case 'a':
+                case Tile.TileType.origin:
+                    // TODO: move this logic and other cases of this method
                     if (gameState == GameState.countdown)
                     {
                         Debug.Log("player wins");
                     }
                     break;
-                case 'b':
+                case Tile.TileType.trigger:
                     if (gameState == GameState.queueLoaded)
                     {
                         Debug.Log("countdown begins");
@@ -61,7 +55,7 @@ public class MapManager : MonoBehaviour
                         StartCountdown();
                     }
                     break;
-                case 'c':
+                case Tile.TileType.setter:
                     if (gameState == GameState.exploration)
                     {
                         gameState = GameState.queueLoaded;
@@ -81,7 +75,7 @@ public class MapManager : MonoBehaviour
 
     public void UpdateWorld()
     {
-        foreach (GameObject tile in tileMap)
+        foreach (Tile tile in tileMap.Values)
         {
             if (tile != null)
             {
@@ -91,13 +85,13 @@ public class MapManager : MonoBehaviour
         
     }
 
-    public bool IsGameOver(uint x, uint y)
+    public bool IsGameOver(int x, int y)
     {
-        GameObject landingTile = tileMap[x, y];
+        Tile landingTile = tileMap[TileIdentifier(x, y)];
         if (landingTile != null)
         {
             // TODO: Fix this in a more elegant way
-            return landingTile.GetComponent<Tile>().BadTile() && gameState == GameState.countdown;
+            return landingTile.BadTile() && gameState == GameState.countdown;
         }
 
         return true;
@@ -105,9 +99,12 @@ public class MapManager : MonoBehaviour
 
     void StartCountdown()
     {
-        foreach (GameObject tile in tileMap)
+        foreach (Tile tile in tileMap.Values)
         {
-            tile.GetComponent<Tile>().StartCountdown();
+            if (tile != null)
+            {
+                tile.StartCountdown();
+            }
         }
     }
 

@@ -55,7 +55,7 @@ public class GridMovement : MonoBehaviour
         origPosition = transform.position;
         targetPosition = origPosition + direction;
 
-        if (mapManager.CanMove((uint)targetPosition.x, (uint)targetPosition.y))
+        if (mapManager.CanMove((int)targetPosition.x, (int)targetPosition.y))
         {
 
             isMoving = true;
@@ -72,7 +72,7 @@ public class GridMovement : MonoBehaviour
 
             isMoving = false;
             mapManager.UpdateWorld();
-            gameOver = mapManager.IsGameOver((uint)targetPosition.x, (uint)targetPosition.y);
+            gameOver = mapManager.IsGameOver((int)targetPosition.x, (int)targetPosition.y);
         }
     }
 }

@@ -7,56 +7,40 @@ public class Tile : MonoBehaviour
     public Animator animator;
 
     // TODO: this screams of polimorphism. For the moment just hacking this here
-    enum TileType
+    public enum TileType
     {
         countdown,
         origin,
         trigger,
         setter,
     }
-    Dictionary<TileType, int> tileTypeAnimatorDic = new Dictionary<TileType, int>{
+    public TileType type;
+
+    Dictionary<TileType, int> typeAnimatorDic = new Dictionary<TileType, int>{
         {TileType.origin, -1},
         {TileType.trigger, -2},
         {TileType.setter, -3},
+        {TileType.countdown, 1},
     };
     bool countDownNextTurn = false;
     bool countDownOn = false;
     uint counter = 0;
-    TileType tileType;
 
     public void StartCountdown()
     {
         countDownNextTurn = true;
     }
 
-    public void SetTile(char type)
-    {
-        switch (type)
-        {
-            case 'a':
-                tileType = TileType.origin;
-                break;
-            case 'b':
-                tileType = TileType.trigger;
-                break;
-            case 'c':
-                tileType = TileType.setter;
-                break;
-            default:
-                tileType = TileType.countdown;
-                counter = (uint)type - '0';
-                break;
-        }
+    private void Start() {
+        AnimateTile(typeAnimatorDic[type]);
 
-        if (counter != 0)
+        if (type == TileType.countdown)
         {
-            AnimateTile((int)counter);
-        }
-        else
-        {
-            AnimateTile(tileTypeAnimatorDic[tileType]);
+            // TODO change tiles to use canvas for numbering
+            counter = 1;
         }
     }
+
 
     public void UpdateTile()
     {
@@ -74,13 +58,13 @@ public class Tile : MonoBehaviour
         countDownOn = countDownNextTurn;
     }
 
-    void AnimateTile(int tileTypeAnimator)
+    void AnimateTile(int typeAnimator)
     {
-        animator.SetInteger("tileTypeAnimator", tileTypeAnimator);
+        animator.SetInteger("tileTypeAnimator", typeAnimator);
     }
 
     public bool BadTile()
     {
-        return counter == 0 && tileType == TileType.countdown;
+        return counter == 0 && type == TileType.countdown;
     }
 }
