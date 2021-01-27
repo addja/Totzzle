@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Tile : MonoBehaviour
 {
     public Animator animator;
+    public TextMeshProUGUI displayText;
 
     // TODO: this screams of polimorphism. For the moment just hacking this here
     public enum TileType
@@ -15,6 +17,7 @@ public class Tile : MonoBehaviour
         setter,
     }
     public TileType type;
+    public uint counterInitialValue;
 
     Dictionary<TileType, int> typeAnimatorDic = new Dictionary<TileType, int>{
         {TileType.origin, -1},
@@ -36,8 +39,8 @@ public class Tile : MonoBehaviour
 
         if (type == TileType.countdown)
         {
-            // TODO change tiles to use canvas for numbering
-            counter = 1;
+            counter = counterInitialValue;
+            UpdateDisplayedValue(counter.ToString());
         }
     }
 
@@ -51,7 +54,7 @@ public class Tile : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-            AnimateTile((int)counter);
+            UpdateDisplayedValue(counter.ToString());
         }
 
         // TODO: Don't like this, need to think something elegant
@@ -61,6 +64,12 @@ public class Tile : MonoBehaviour
     void AnimateTile(int typeAnimator)
     {
         animator.SetInteger("tileTypeAnimator", typeAnimator);
+    }
+
+    void UpdateDisplayedValue(string value)
+    {
+        Debug.Log("YO");
+        displayText.text = value;
     }
 
     public bool BadTile()
