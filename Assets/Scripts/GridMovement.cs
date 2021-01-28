@@ -8,22 +8,33 @@ public class GridMovement : MonoBehaviour
     public float timeToMove = .2f;
     public MapManager mapManager;
 
-    bool isMoving;
-    bool gameOver = false;
+    bool isMoving = false;
     Vector2 origPosition, targetPosition;
 
     void Update()
     {
-        if (!isMoving && !gameOver)
+        if (!isMoving)
         {
-            processInput();
+            ProcessInput();
         }
     }
 
-    void processInput()
+    void ProcessInput()
     {
-        Vector2 direction = Vector2.zero;
+        ProcessQueueEditorOpened();
+        ProcessPlayerMovementInput();
+    }
 
+    void ProcessQueueEditorOpened()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            mapManager.QueueLoaded();
+        }
+    }
+
+    void ProcessPlayerMovementInput() {
+        Vector2 direction = Vector2.zero;
         // If deployed, should use GetAxisRaw for plaform neutrality
         if (Input.GetKey(KeyCode.W))
         {
@@ -45,7 +56,6 @@ public class GridMovement : MonoBehaviour
         {
             return;
         }
-
         StartCoroutine(MovePlayer(direction));
     }
 
@@ -57,7 +67,6 @@ public class GridMovement : MonoBehaviour
 
         if (mapManager.CanMove((int)targetPosition.x, (int)targetPosition.y))
         {
-
             isMoving = true;
             float ellapsedTime = 0;
             while (ellapsedTime < timeToMove)
@@ -72,7 +81,7 @@ public class GridMovement : MonoBehaviour
 
             isMoving = false;
             mapManager.UpdateWorld();
-            gameOver = mapManager.IsGameOver((int)targetPosition.x, (int)targetPosition.y);
+            mapManager.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
         }
     }
 }

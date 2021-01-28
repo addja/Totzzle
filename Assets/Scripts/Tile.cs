@@ -14,7 +14,6 @@ public class Tile : MonoBehaviour
         countdown,
         origin,
         trigger,
-        setter,
     }
     public TileType type;
     public uint counterInitialValue;
@@ -22,19 +21,18 @@ public class Tile : MonoBehaviour
     Dictionary<TileType, int> typeAnimatorDic = new Dictionary<TileType, int>{
         {TileType.origin, -1},
         {TileType.trigger, -2},
-        {TileType.setter, -3},
         {TileType.countdown, 1},
     };
-    bool countDownNextTurn = false;
     bool countDownOn = false;
     uint counter = 0;
 
     public void StartCountdown()
     {
-        countDownNextTurn = true;
+        countDownOn = true;
     }
 
-    private void Start() {
+    private void Start()
+    {
         AnimateTile(typeAnimatorDic[type]);
 
         if (type == TileType.countdown)
@@ -56,9 +54,6 @@ public class Tile : MonoBehaviour
             }
             UpdateDisplayedValue(counter.ToString());
         }
-
-        // TODO: Don't like this, need to think something elegant
-        countDownOn = countDownNextTurn;
     }
 
     void AnimateTile(int typeAnimator)
@@ -68,12 +63,6 @@ public class Tile : MonoBehaviour
 
     void UpdateDisplayedValue(string value)
     {
-        Debug.Log("YO");
         displayText.text = value;
-    }
-
-    public bool BadTile()
-    {
-        return counter == 0 && type == TileType.countdown;
     }
 }

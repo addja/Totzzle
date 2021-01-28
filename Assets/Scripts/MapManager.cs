@@ -8,6 +8,7 @@ public class MapManager : MonoBehaviour
 
     private Dictionary<string, Tile> tileMap = new Dictionary<string, Tile>();
 
+    private Vector2Int playerPosition = new Vector2Int();
     private enum GameState
     {
         exploration, // pre queueLoaded
@@ -28,48 +29,57 @@ public class MapManager : MonoBehaviour
         foreach (Tile tile in grid.GetComponentsInChildren<Tile>())
         {
             Vector3 tilePosition = tile.transform.position;
-            tileMap[TileIdentifier((int)tilePosition.x,(int)tilePosition.y)] = tile;
+            tileMap[TileIdentifier((int)tilePosition.x, (int)tilePosition.y)] = tile;
+        }
+    }
+
+    public void QueueLoaded()
+    {
+        if (gameState == GameState.exploration)
+        {
+            // assumption: Player is on a valid tile
+            Tile tile;
+            tileMap.TryGetValue(TileIdentifier(playerPosition.x, playerPosition.y), out tile);
+            if (tile.type == Tile.TileType.trigger)
+            {
+                StartCountdown();
+            }
+            else
+            {
+                gameState = GameState.queueLoaded;
+            }
+        }
+    }
+
+    public void NewPlayerPosition(int x, int y)
+    {
+        playerPosition = new Vector2Int(x, y);
+        Tile tile; // assumption: Player moves to a valid tile
+        tileMap.TryGetValue(TileIdentifier(x, y), out tile);
+        switch (tile.type)
+        {
+            case Tile.TileType.origin:
+                if (gameState == GameState.countdown)
+                {
+                    Debug.Log("player wins");
+                }
+                break;
+            case Tile.TileType.trigger:
+                if (gameState == GameState.queueLoaded)
+                {
+                    StartCountdown();
+                }
+                break;
+            default:
+                // nothing
+                break;
         }
     }
 
     public bool CanMove(int x, int y)
     {
-        Tile tile;
-        if (tileMap.TryGetValue(TileIdentifier(x, y), out tile) && tile != null)
-        {
-            switch (tile.type)
-            {
-                case Tile.TileType.origin:
-                    // TODO: move this logic and other cases of this method
-                    if (gameState == GameState.countdown)
-                    {
-                        Debug.Log("player wins");
-                    }
-                    break;
-                case Tile.TileType.trigger:
-                    if (gameState == GameState.queueLoaded)
-                    {
-                        Debug.Log("countdown begins");
-                        gameState = GameState.countdown;
-                        StartCountdown();
-                    }
-                    break;
-                case Tile.TileType.setter:
-                    if (gameState == GameState.exploration)
-                    {
-                        gameState = GameState.queueLoaded;
-                        Debug.Log("queue loaded");
-                    }
-                    break;
-                default:
-                    // nothing
-                    break;
-            }
-
-            return true;
-        }
-
-        return false;
+        Tile tile; // assumption: Player moves to a valid tile
+        return (tileMap.TryGetValue(TileIdentifier(x, y), out tile) && tile != null);
     }
 
     public void UpdateWorld()
@@ -81,23 +91,12 @@ public class MapManager : MonoBehaviour
                 tile.GetComponent<Tile>().UpdateTile();
             }
         }
-        
-    }
 
-    public bool IsGameOver(int x, int y)
-    {
-        Tile landingTile = tileMap[TileIdentifier(x, y)];
-        if (landingTile != null)
-        {
-            // TODO: Fix this in a more elegant way
-            return landingTile.BadTile() && gameState == GameState.countdown;
-        }
-
-        return true;
     }
 
     void StartCountdown()
     {
+        gameState = GameState.countdown;
         foreach (Tile tile in tileMap.Values)
         {
             if (tile != null)
