@@ -14,6 +14,7 @@ namespace GOD
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
         protected bool isMoving = false;
+        protected bool m_IsInputDisabled = false;
         protected Vector2 origPosition, targetPosition;
 
         void Awake ()
@@ -34,9 +35,17 @@ namespace GOD
             s_Instance = null;
         }
 
+        public void DisableInput() {
+            m_IsInputDisabled = true;
+        }
+
+        public void EnableInput() {
+            m_IsInputDisabled = false;
+        }
+
         void Update()
         {
-            if (!m_InPause && !isMoving)
+            if (!m_InPause && !isMoving && !m_IsInputDisabled)
             {
                 ProcessPlayerMovementInput();
             }

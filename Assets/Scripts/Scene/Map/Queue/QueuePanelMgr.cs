@@ -37,10 +37,12 @@ namespace GOD
         public GameObject queueCompressedPanel;
         public GameObject queueExpandedPanel;
 
+        protected bool m_IsInputDisabled = true;
         private bool queueExpanded = false;
 
         public void ToggleQueueExpanded()
         {
+            m_IsInputDisabled = !m_IsInputDisabled;
             queueExpanded = !queueExpanded;
             if (queueExpanded)
             {
@@ -52,6 +54,22 @@ namespace GOD
                 queueExpandedPanel.SetActive(false);
                 queueCompressedPanel.SetActive(true);
 
+            }
+        }
+
+        public void DisableInput() {
+            m_IsInputDisabled = true;
+        }
+
+        public void EnableInput() {
+            m_IsInputDisabled = false;
+        }
+
+
+        private void Update()
+        {
+            if (!m_IsInputDisabled) {
+                // processInput
             }
         }
     }

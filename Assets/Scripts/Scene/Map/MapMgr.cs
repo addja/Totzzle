@@ -14,6 +14,7 @@ namespace GOD
         protected static MapMgr s_Instance;
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
+        protected bool m_QueueOpened = false;
 
         void Awake()
         {
@@ -65,14 +66,17 @@ namespace GOD
             }
         }
 
-        public void QueueEditorClosed()
+        public void QueueEditorClose()
         {
-            // Player input.enable
+            m_QueueOpened = false;
+            PlayerCharacter.Instance.EnableInput();
+            QueuePanelMgr.Instance.ToggleQueueExpanded();
         }
 
-        public void QueueEditorOpened()
+        public void QueueEditorOpen()
         {
-            // Player input.disable
+            m_QueueOpened = true;
+            PlayerCharacter.Instance.DisableInput();
             QueuePanelMgr.Instance.ToggleQueueExpanded();
             // TODO: implement queue logic. Need to load queue
             if (gameState == GameState.exploration)
@@ -164,17 +168,22 @@ namespace GOD
                     Unpause();
                 }
             }
-            else
+            // else if (MapInput.Instance.QueueEditor.Down && !m_InPause) // Guille this is buggy as fuck
+            else if (Input.GetKeyDown(KeyCode.Tab) && !m_InPause)
             {
-                ProcessQueueEditorOpened();
+                ProcessQueueEditorInput();
             }
         }
 
-        void ProcessQueueEditorOpened()
+        void ProcessQueueEditorInput()
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (m_QueueOpened)
             {
-                QueueEditorOpened();
+                QueueEditorClose();
+            }
+            else
+            {
+                QueueEditorOpen();
             }
         }
 
@@ -192,6 +201,10 @@ namespace GOD
                 Time.timeScale = 0;
 
                 UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("UIMenus", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+                // stop input processing from Player an Queue
+                PlayerCharacter.Instance.DisableInput();
+                QueuePanelMgr.Instance.DisableInput();
             }
         }
 
@@ -217,6 +230,10 @@ namespace GOD
             yield return new WaitForFixedUpdate();
             yield return new WaitForEndOfFrame();
             m_InPause = false;
+
+            // resume input processing from Player an Queue
+            PlayerCharacter.Instance.EnableInput();
+            QueuePanelMgr.Instance.EnableInput();
         }
     }
 
