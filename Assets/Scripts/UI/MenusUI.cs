@@ -8,7 +8,7 @@ namespace GOD
     {
         public void ExitPause()
         {
-            PlayerCharacter.Instance.Unpause();
+            MapMgr.Instance.Unpause();
         }
 
         public void RestartLevel()

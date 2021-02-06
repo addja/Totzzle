@@ -10,7 +10,6 @@ namespace GOD
         static public PlayerCharacter Instance { get { return s_Instance; } }
 
         public float timeToMove = .2f;
-        public MapManager mapManager;
 
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
@@ -37,38 +36,13 @@ namespace GOD
 
         void Update()
         {
-            if (PlayerInput.Instance.Pause.Down)
+            if (!m_InPause && !isMoving)
             {
-                if (!m_InPause)
-                {
-                    Pause();
-                }
-                else
-                {
-                    Unpause();
-                }
-            }
-            else if (!isMoving && !m_InPause)
-            {
-                ProcessInput();
+                ProcessPlayerMovementInput();
             }
         }
 
-        void ProcessInput()
-        {
-            ProcessQueueEditorOpened();
-            ProcessPlayerMovementInput();
-        }
-
-        void ProcessQueueEditorOpened()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                mapManager.QueueEditorOpened();
-            }
-        }
-
-         void ProcessPlayerMovementInput() {
+        void ProcessPlayerMovementInput() {
             Vector2 direction = Vector2.zero;
 
             if (PlayerInput.Instance.Vertical.Value > 0f)
@@ -95,54 +69,13 @@ namespace GOD
             StartCoroutine(MovePlayer(direction));
         }
 
-        public void Pause()
-        {
-            if (!m_InPause)
-            {
-                PlayerInput.Instance.ReleaseControl(false);
-                PlayerInput.Instance.Pause.GainControl();
-                m_InPause = true;
-
-                // Hack for the input from the 2D Game Kit tutorial:
-                //  If the time scale is not zeroed here, the input component will register
-                //  twice the key downs.
-                Time.timeScale = 0;
-
-                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("UIMenus", UnityEngine.SceneManagement.LoadSceneMode.Additive);
-            }
-        }
-
-        public void Unpause()
-        {
-            //if the timescale is already > 0, we 
-            if (Time.timeScale > 0)
-                return;
-
-            if (m_InPause)
-            {
-                StartCoroutine(UnpauseCoroutine());
-            }
-        }
-
-        protected IEnumerator UnpauseCoroutine()
-        {
-            Time.timeScale = 1;
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("UIMenus");
-            PlayerInput.Instance.GainControl();
-            //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
-            //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
-            yield return new WaitForFixedUpdate();
-            yield return new WaitForEndOfFrame();
-            m_InPause = false;
-        }
-
         // fancy coroutine
         protected IEnumerator MovePlayer(Vector2 direction)
         {
             origPosition = transform.position;
             targetPosition = origPosition + direction;
 
-            if (mapManager.CanMove((int)targetPosition.x, (int)targetPosition.y))
+            if (MapMgr.Instance.CanMove((int)targetPosition.x, (int)targetPosition.y))
             {
                 isMoving = true;
                 float ellapsedTime = 0;
@@ -157,8 +90,8 @@ namespace GOD
                 transform.position = targetPosition;
 
                 isMoving = false;
-                mapManager.UpdateWorld();
-                mapManager.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
+                MapMgr.Instance.UpdateWorld();
+                MapMgr.Instance.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
             }
         }
     }
