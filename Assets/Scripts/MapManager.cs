@@ -33,8 +33,14 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void QueueLoaded()
+    public void QueueEditorClosed()
     {
+        // Player input.enable
+    }
+
+    public void QueueEditorOpened()
+    {
+        // TODO: implement queue logic. Need to load queue
         if (gameState == GameState.exploration)
         {
             // assumption: Player is on a valid tile

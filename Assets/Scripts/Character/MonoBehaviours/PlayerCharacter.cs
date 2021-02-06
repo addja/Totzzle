@@ -64,7 +64,7 @@ namespace GOD
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                mapManager.QueueLoaded();
+                mapManager.QueueEditorOpened();
             }
         }
 

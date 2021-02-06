@@ -11,7 +11,6 @@ namespace GOD
 
         protected static PlayerInput s_Instance;
 
-
         public bool HaveControl { get { return m_HaveControl; } }
 
         public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);
