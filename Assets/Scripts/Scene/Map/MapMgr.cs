@@ -69,15 +69,15 @@ namespace GOD
         public void QueueEditorClose()
         {
             m_QueueOpened = false;
-            PlayerCharacter.Instance.EnableInput();
-            QueuePanelMgr.Instance.ToggleQueueExpanded();
+            PlayerCharacter.Instance.EnablePlayer();
+            QueuePanelMgr.Instance.DisableQueue();
         }
 
         public void QueueEditorOpen()
         {
             m_QueueOpened = true;
-            PlayerCharacter.Instance.DisableInput();
-            QueuePanelMgr.Instance.ToggleQueueExpanded();
+            PlayerCharacter.Instance.DisablePlayer();
+            QueuePanelMgr.Instance.EnableQueue();
             // TODO: implement queue logic. Need to load queue
             if (gameState == GameState.exploration)
             {

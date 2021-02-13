@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GOD
 {
@@ -33,28 +34,22 @@ namespace GOD
         {
             s_Instance = null;
         }
-        // Manages which queue panel is displayed (compressed or expanded)
-        public GameObject queueCompressedPanel;
-        public GameObject queueExpandedPanel;
+
+        public Image panelImage;
+        public Image queueBorder;
 
         protected bool m_IsInputDisabled = true;
-        private bool queueExpanded = false;
 
-        public void ToggleQueueExpanded()
-        {
-            m_IsInputDisabled = !m_IsInputDisabled;
-            queueExpanded = !queueExpanded;
-            if (queueExpanded)
-            {
-                queueCompressedPanel.SetActive(false);
-                queueExpandedPanel.SetActive(true);
-            }
-            else
-            {
-                queueExpandedPanel.SetActive(false);
-                queueCompressedPanel.SetActive(true);
+        public void EnableQueue() {
+            m_IsInputDisabled = true;
+            panelImage.color = new Color(1, 1, 1);
+            queueBorder.color = new Color(1, 0, 0);
+        }
 
-            }
+        public void DisableQueue() {
+            m_IsInputDisabled = false;
+            panelImage.color = new Color(0, 0, 0);
+            queueBorder.color = new Color(.5f, .5f, .5f);
         }
 
         public void DisableInput() {

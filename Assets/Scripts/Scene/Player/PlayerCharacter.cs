@@ -35,6 +35,18 @@ namespace GOD
             s_Instance = null;
         }
 
+        public GameObject playerDisableCanvas;
+
+        public void DisablePlayer() {
+            m_IsInputDisabled = true;
+            playerDisableCanvas.SetActive(true);
+        }
+
+        public void EnablePlayer() {
+            m_IsInputDisabled = false;
+            playerDisableCanvas.SetActive(false);
+        }
+
         public void DisableInput() {
             m_IsInputDisabled = true;
         }
