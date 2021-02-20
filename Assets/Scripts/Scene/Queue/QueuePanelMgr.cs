@@ -38,33 +38,48 @@ namespace GOD
         public Image panelImage;
         public Image queueBorder;
 
-        protected bool m_IsInputDisabled = true;
+        protected bool m_InputEnabled = false;
 
         public void EnableQueue() {
-            m_IsInputDisabled = true;
-            panelImage.color = new Color(1, 1, 1);
+            Debug.Log("Queue enabled");
+            m_InputEnabled = true;
+            panelImage.color = new Color(.4f, .4f, .4f);
             queueBorder.color = new Color(1, 0, 0);
+            QueueSlotsMgr.Instance.SelectSlot();
         }
 
         public void DisableQueue() {
-            m_IsInputDisabled = false;
+            Debug.Log("Queue disabled");
+            m_InputEnabled = false;
             panelImage.color = new Color(0, 0, 0);
             queueBorder.color = new Color(.5f, .5f, .5f);
+            QueueSlotsMgr.Instance.DeselectSlot();
         }
 
         public void DisableInput() {
-            m_IsInputDisabled = true;
+            m_InputEnabled = false;
         }
 
         public void EnableInput() {
-            m_IsInputDisabled = false;
+            m_InputEnabled = true;
         }
 
 
         private void Update()
         {
-            if (!m_IsInputDisabled) {
-                // processInput
+            if (m_InputEnabled) {
+
+                // input is very broken bruh
+                // if (QueuePanelInput.Instance.Horizontal.Value < 0f)
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    QueueSlotsMgr.Instance.SelectRightSlot();
+                }
+                // else if (QueuePanelInput.Instance.Horizontal.Value > 0f)
+                else if (Input.GetKeyDown(KeyCode.A))
+                {
+                    QueueSlotsMgr.Instance.SelectLeftSlot();
+                }
             }
         }
     }
