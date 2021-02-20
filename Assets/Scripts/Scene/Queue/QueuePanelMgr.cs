@@ -40,11 +40,19 @@ namespace GOD
 
         protected bool m_InputEnabled = false;
 
+        private enum QueuePanelState
+        {
+            queueSlots,
+            optionSlots,
+        }
+        private QueuePanelState m_queuePanelState;
+
         public void EnableQueue() {
             Debug.Log("Queue enabled");
             m_InputEnabled = true;
             panelImage.color = new Color(.4f, .4f, .4f);
             queueBorder.color = new Color(1, 0, 0);
+            m_queuePanelState = QueuePanelState.queueSlots;
             QueueSlotsMgr.Instance.SelectSlot();
         }
 
@@ -54,6 +62,7 @@ namespace GOD
             panelImage.color = new Color(0, 0, 0);
             queueBorder.color = new Color(.5f, .5f, .5f);
             QueueSlotsMgr.Instance.DeselectSlot();
+            OptionSlotsMgr.Instance.DeselectSlot();
         }
 
         public void DisableInput() {
@@ -68,18 +77,51 @@ namespace GOD
         private void Update()
         {
             if (m_InputEnabled) {
+                switch ( m_queuePanelState) {
+                    case QueuePanelState.queueSlots:
+                        ProcessQueueSlotsInput();
+                        break;
+                    case QueuePanelState.optionSlots:
+                        ProcessOptionSlotsInput();
+                        break;
+                }
+            }
+        }
 
-                // input is very broken bruh
-                // if (QueuePanelInput.Instance.Horizontal.Value < 0f)
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    QueueSlotsMgr.Instance.SelectRightSlot();
-                }
-                // else if (QueuePanelInput.Instance.Horizontal.Value > 0f)
-                else if (Input.GetKeyDown(KeyCode.A))
-                {
-                    QueueSlotsMgr.Instance.SelectLeftSlot();
-                }
+        private void ProcessQueueSlotsInput()
+        {
+            // input is very broken bruh
+            // if (QueuePanelInput.Instance.Horizontal.Value < 0f)
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                QueueSlotsMgr.Instance.SelectRightSlot();
+            }
+            // else if (QueuePanelInput.Instance.Horizontal.Value > 0f)
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                QueueSlotsMgr.Instance.SelectLeftSlot();
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                QueueSlotsMgr.Instance.OptionsSlotsSelected();
+                OptionSlotsMgr.Instance.SelectSlot();
+                m_queuePanelState = QueuePanelState.optionSlots;
+            }
+        }
+
+        private void ProcessOptionSlotsInput()
+        {
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                OptionSlotsMgr.Instance.SelectRightSlot();
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                OptionSlotsMgr.Instance.SelectLeftSlot();
+            } else if (Input.GetKeyDown(KeyCode.Return)) {
+                OptionSlotsMgr.Instance.LockInQueue();
+                QueueSlotsMgr.Instance.SelectSlot();
+                m_queuePanelState = QueuePanelState.queueSlots;
             }
         }
     }

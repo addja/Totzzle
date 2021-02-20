@@ -42,6 +42,7 @@ namespace GOD
         void Start()
         {
             m_queueSlots = GetComponentsInChildren<QueueSlot>();
+            Debug.Log("Size of the queueSlots " + m_queueSlots.Length);
             foreach (QueueSlot queueSlot in m_queueSlots)
             {
                 queueSlot.Deactivate();
@@ -92,6 +93,11 @@ namespace GOD
 
             m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
             m_activeQueueSlot.Activate();
+        }
+
+        public void OptionsSlotsSelected()
+        {
+            m_activeQueueSlot.Select();
         }
     }
 }
