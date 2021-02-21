@@ -16,6 +16,8 @@ namespace GOD
         protected bool m_InPausingProcess = false;
         protected bool m_QueueOpened = false;
 
+        public string PauseSceneName = "";
+
         void Awake()
         {
             if (s_Instance == null)
@@ -200,7 +202,7 @@ namespace GOD
                 //  twice the key downs.
                 Time.timeScale = 0;
 
-                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("UIMenus", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(PauseSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
                 // stop input processing from Player an Queue
                 PlayerCharacter.Instance.DisableInput();
@@ -223,7 +225,7 @@ namespace GOD
         protected IEnumerator UnpauseCoroutine()
         {
             Time.timeScale = 1;
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("UIMenus");
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(PauseSceneName);
             MapInput.Instance.GainControl();
             //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
             //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
