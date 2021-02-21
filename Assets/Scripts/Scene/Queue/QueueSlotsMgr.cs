@@ -20,6 +20,14 @@ namespace GOD
                 s_Instance = this;
             else
                 throw new UnityException("There cannot be more than one QueueSlotsMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+    
+            m_queueSlots = GetComponentsInChildren<QueueSlot>();
+            foreach (QueueSlot queueSlot in m_queueSlots)
+            {
+                queueSlot.Deactivate();
+            }
+            m_activeQueueSlotIndex = 0;
+            m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
         }
 
         void OnEnable()
@@ -39,33 +47,18 @@ namespace GOD
         private QueueSlot m_activeQueueSlot;
         private int m_activeQueueSlotIndex;
 
-        void Start()
-        {
-            m_queueSlots = GetComponentsInChildren<QueueSlot>();
-            Debug.Log("Size of the queueSlots " + m_queueSlots.Length);
-            foreach (QueueSlot queueSlot in m_queueSlots)
-            {
-                queueSlot.Deactivate();
-            }
-            m_activeQueueSlotIndex = 0;
-            m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
-        }
-
         public void SelectSlot()
         {
-            Debug.Log("Select slot");
             m_activeQueueSlot.Activate();
         }
 
         public void DeselectSlot()
         {
-            Debug.Log("DeselectSlot slot");
             m_activeQueueSlot.Deactivate();
         }
 
         public void SelectLeftSlot()
         {
-            Debug.Log("SelectLeftSlot");
             m_activeQueueSlot.Deactivate();
 
             if (m_activeQueueSlotIndex == 0)
@@ -81,7 +74,6 @@ namespace GOD
 
         public void SelectRightSlot()
         {
-            Debug.Log("SelectRightSlot");
             m_activeQueueSlot.Deactivate();
 
             if (m_activeQueueSlotIndex == m_queueSlots.Length-1)
@@ -98,6 +90,11 @@ namespace GOD
         public void OptionsSlotsSelected()
         {
             m_activeQueueSlot.Select();
+        }
+
+        public void SetSlotValue(int value, OptionSlot optionSlot)
+        {
+            m_activeQueueSlot.SetSlotValue(value, optionSlot);
         }
     }
 }

@@ -48,7 +48,6 @@ namespace GOD
         private QueuePanelState m_queuePanelState;
 
         public void EnableQueue() {
-            Debug.Log("Queue enabled");
             m_InputEnabled = true;
             panelImage.color = new Color(.4f, .4f, .4f);
             queueBorder.color = new Color(1, 0, 0);
@@ -57,7 +56,6 @@ namespace GOD
         }
 
         public void DisableQueue() {
-            Debug.Log("Queue disabled");
             m_InputEnabled = false;
             panelImage.color = new Color(0, 0, 0);
             queueBorder.color = new Color(.5f, .5f, .5f);

@@ -52,26 +52,22 @@ namespace GOD
 
         public void SelectSlot()
         {
-            Debug.Log("Select slot");
             m_activeOptionSlot.Activate();
         }
 
         public void DeselectSlot()
         {
-            Debug.Log("DeselectSlot slot");
             m_activeOptionSlot.Deactivate();
         }
 
         public void SelectLeftSlot()
         {
-            Debug.Log("SelectLeftSlot");
             m_activeOptionSlot.Deactivate();
             MoveSelectedLeft();
         }
 
         public void SelectRightSlot()
         {
-            Debug.Log("SelectRightSlot");
             m_activeOptionSlot.Deactivate();
             MoveSelectedRight();
         }
@@ -80,6 +76,7 @@ namespace GOD
         {
             m_activeOptionSlot.LockInQueue();
             MoveSelectedRight();
+            m_activeOptionSlot.Deactivate();
         }
 
         private void MoveSelectedRight() {

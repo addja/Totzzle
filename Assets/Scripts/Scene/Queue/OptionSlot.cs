@@ -7,6 +7,8 @@ namespace GOD
 {
     public class OptionSlot : MonoBehaviour
     {
+        public int m_value;
+
         private enum OptionSlotState {
             enabled,
             disabled,
@@ -15,10 +17,11 @@ namespace GOD
         private OptionSlotState m_optionSlotState;
         private Image m_image; // TODO use animations instead
 
-        private void Start()
+        private void Awake()
         {
             m_optionSlotState = OptionSlotState.enabled;
             m_image = GetComponent<Image>();
+            GetComponentInChildren<TMPro.TMP_Text>().text = m_value.ToString();
         }
 
         public void Activate()
@@ -37,6 +40,8 @@ namespace GOD
         {
             m_optionSlotState = OptionSlotState.disabled;
             m_image.color = new Color(.5f, .5f, .5f);
+            QueueSlotsMgr.Instance.SetSlotValue(m_value, this); 
+            m_image.color = new Color(.5f, .25f, .25f);
         }
 
         public bool IsNotDisabled() {
