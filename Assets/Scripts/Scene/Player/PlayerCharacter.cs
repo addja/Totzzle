@@ -96,7 +96,7 @@ namespace GOD
             origPosition = transform.position;
             targetPosition = origPosition + direction;
 
-            if (MapMgr.Instance.CanMove((int)targetPosition.x, (int)targetPosition.y))
+            if (GridMgr.Instance.CanMove((int)targetPosition.x, (int)targetPosition.y))
             {
                 isMoving = true;
                 float ellapsedTime = 0;
@@ -111,8 +111,8 @@ namespace GOD
                 transform.position = targetPosition;
 
                 isMoving = false;
-                MapMgr.Instance.UpdateWorld();
-                MapMgr.Instance.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
+                GridMgr.Instance.UpdateWorld();
+                GridMgr.Instance.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
             }
         }
     }

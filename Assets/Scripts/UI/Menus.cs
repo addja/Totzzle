@@ -8,7 +8,7 @@ namespace GOD
     {
         public void ExitPause()
         {
-            MapMgr.Instance.Unpause();
+            GridMgr.Instance.Unpause();
         }
 
         public void RestartLevel()

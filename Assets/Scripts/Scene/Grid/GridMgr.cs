@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class MapMgr : MonoBehaviour
+    public class GridMgr : MonoBehaviour
     {
-        public static MapMgr Instance
+        public static GridMgr Instance
         {
             get { return s_Instance; }
         }
 
-        protected static MapMgr s_Instance;
+        protected static GridMgr s_Instance;
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
         protected bool m_QueueOpened = false;
@@ -23,7 +23,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else
-                throw new UnityException("There cannot be more than one MapMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnEnable()
@@ -31,15 +31,13 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one MapMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnDisable()
         {
             s_Instance = null;
         }
-
-        public GameObject grid;
 
         private Dictionary<string, Tile> tileMap = new Dictionary<string, Tile>();
 
@@ -61,11 +59,12 @@ namespace GOD
         {
             gameState = GameState.exploration;
 
-            foreach (Tile tile in grid.GetComponentsInChildren<Tile>())
+            foreach (Tile tile in GetComponentsInChildren<Tile>())
             {
                 Vector3 tilePosition = tile.transform.position;
                 tileMap[TileIdentifier((int)tilePosition.x, (int)tilePosition.y)] = tile;
             }
+
         }
 
         public void QueueEditorClose()
@@ -159,7 +158,7 @@ namespace GOD
 
         void ProcessInput()
         {
-            if (MapInput.Instance.Pause.Down)
+            if (GridInput.Instance.Pause.Down)
             {
                 if (!m_InPause)
                 {
@@ -170,7 +169,7 @@ namespace GOD
                     Unpause();
                 }
             }
-            // else if (MapInput.Instance.QueueEditor.Down && !m_InPause) // Guille this is buggy as fuck
+            // else if (GridInput.Instance.QueueEditor.Down && !m_InPause) // Guille this is buggy as fuck
             else if (Input.GetKeyDown(KeyCode.Tab) && !m_InPause)
             {
                 ProcessQueueEditorInput();
@@ -193,8 +192,8 @@ namespace GOD
         {
             if (!m_InPause)
             {
-                MapInput.Instance.ReleaseControl(false);
-                MapInput.Instance.Pause.GainControl();
+                GridInput.Instance.ReleaseControl(false);
+                GridInput.Instance.Pause.GainControl();
                 m_InPause = true;
 
                 // Hack for the input from the 2D Game Kit tutorial:
@@ -226,7 +225,7 @@ namespace GOD
         {
             Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(PauseSceneName);
-            MapInput.Instance.GainControl();
+            GridInput.Instance.GainControl();
             //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
             //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
             yield return new WaitForFixedUpdate();

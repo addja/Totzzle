@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class MapInput : InputComponent
+    public class GridInput : InputComponent
     {
-        public static MapInput Instance
+        public static GridInput Instance
         {
             get { return s_Instance; }
         }
 
-        protected static MapInput s_Instance;
+        protected static GridInput s_Instance;
 
         public bool HaveControl { get { return m_HaveControl; } }
 
@@ -27,7 +27,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else
-                throw new UnityException("There cannot be more than one MapInput script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one GridInput script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnEnable()
@@ -35,7 +35,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one MapInput script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one GridInput script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnDisable()
