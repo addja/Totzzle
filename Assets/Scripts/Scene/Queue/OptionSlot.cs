@@ -9,7 +9,8 @@ namespace GOD
     {
         public int m_value;
 
-        private enum OptionSlotState {
+        private enum OptionSlotState
+        {
             enabled,
             disabled,
             selected,
@@ -40,11 +41,12 @@ namespace GOD
         {
             m_optionSlotState = OptionSlotState.disabled;
             m_image.color = new Color(.5f, .5f, .5f);
-            QueueSlotsMgr.Instance.SetSlotValue(m_value, this); 
+            QueueSlotsMgr.Instance.SetSlotValue(m_value, this);
             m_image.color = new Color(.5f, .25f, .25f);
         }
 
-        public bool IsNotDisabled() {
+        public bool IsNotDisabled()
+        {
             return m_optionSlotState == OptionSlotState.disabled;
         }
     }

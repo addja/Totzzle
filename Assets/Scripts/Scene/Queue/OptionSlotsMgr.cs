@@ -50,7 +50,7 @@ namespace GOD
             m_activeOptionSlot = m_optionSlots[m_activeOptionSlotIndex];
         }
 
-        public void SelectSlot()
+        public void HighlightSlot()
         {
             m_activeOptionSlot.Activate();
         }

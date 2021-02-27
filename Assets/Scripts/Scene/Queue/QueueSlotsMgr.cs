@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 namespace GOD
 {
@@ -22,9 +23,17 @@ namespace GOD
                 throw new UnityException("There cannot be more than one QueueSlotsMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
     
             m_queueSlots = GetComponentsInChildren<QueueSlot>();
+
+            foreach (Transform child in transform)
+            {
+                Debug.Log(child.GetType());
+                Debug.Log(child.name);
+            }
+
+            Assert.IsTrue(m_queueSlots.Length > 0);
             foreach (QueueSlot queueSlot in m_queueSlots)
             {
-                queueSlot.Deactivate();
+                queueSlot.Disable();
             }
             m_activeQueueSlotIndex = 0;
             m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
@@ -47,19 +56,19 @@ namespace GOD
         private QueueSlot m_activeQueueSlot;
         private int m_activeQueueSlotIndex;
 
-        public void SelectSlot()
+        public void HighlightSlot()
         {
-            m_activeQueueSlot.Activate();
+            m_activeQueueSlot.Highlight();
         }
 
         public void DeselectSlot()
         {
-            m_activeQueueSlot.Deactivate();
+            m_activeQueueSlot.Disable();
         }
 
         public void SelectLeftSlot()
         {
-            m_activeQueueSlot.Deactivate();
+            m_activeQueueSlot.Disable();
 
             if (m_activeQueueSlotIndex == 0)
             {
@@ -69,12 +78,12 @@ namespace GOD
             }
 
             m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
-            m_activeQueueSlot.Activate();
+            m_activeQueueSlot.Highlight();
         }
 
         public void SelectRightSlot()
         {
-            m_activeQueueSlot.Deactivate();
+            m_activeQueueSlot.Disable();
 
             if (m_activeQueueSlotIndex == m_queueSlots.Length-1)
             {
@@ -84,7 +93,7 @@ namespace GOD
             }
 
             m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
-            m_activeQueueSlot.Activate();
+            m_activeQueueSlot.Highlight();
         }
 
         public void OptionsSlotsSelected()

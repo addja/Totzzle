@@ -52,7 +52,7 @@ namespace GOD
             panelImage.color = new Color(.4f, .4f, .4f);
             queueBorder.color = new Color(1, 0, 0);
             m_queuePanelState = QueuePanelState.queueSlots;
-            QueueSlotsMgr.Instance.SelectSlot();
+            QueueSlotsMgr.Instance.HighlightSlot();
         }
 
         public void DisableQueue() {
@@ -102,7 +102,7 @@ namespace GOD
             else if (Input.GetKeyDown(KeyCode.Return))
             {
                 QueueSlotsMgr.Instance.OptionsSlotsSelected();
-                OptionSlotsMgr.Instance.SelectSlot();
+                OptionSlotsMgr.Instance.HighlightSlot();
                 m_queuePanelState = QueuePanelState.optionSlots;
             }
         }
@@ -118,7 +118,7 @@ namespace GOD
                 OptionSlotsMgr.Instance.SelectLeftSlot();
             } else if (Input.GetKeyDown(KeyCode.Return)) {
                 OptionSlotsMgr.Instance.LockInQueue();
-                QueueSlotsMgr.Instance.SelectSlot();
+                QueueSlotsMgr.Instance.HighlightSlot();
                 m_queuePanelState = QueuePanelState.queueSlots;
             }
         }
