@@ -44,7 +44,7 @@ namespace GOD
             m_optionSlots = GetComponentsInChildren<OptionSlot>();
             foreach (OptionSlot optionSlot in m_optionSlots)
             {
-                optionSlot.Deactivate();
+                optionSlot.Enable();
             }
             m_activeOptionSlotIndex = 0;
             m_activeOptionSlot = m_optionSlots[m_activeOptionSlotIndex];
@@ -52,23 +52,23 @@ namespace GOD
 
         public void HighlightSlot()
         {
-            m_activeOptionSlot.Activate();
+            m_activeOptionSlot.Highlight();
         }
 
         public void DeselectSlot()
         {
-            m_activeOptionSlot.Deactivate();
+            m_activeOptionSlot.Enable();
         }
 
         public void SelectLeftSlot()
         {
-            m_activeOptionSlot.Deactivate();
+            m_activeOptionSlot.Enable();
             MoveSelectedLeft();
         }
 
         public void SelectRightSlot()
         {
-            m_activeOptionSlot.Deactivate();
+            m_activeOptionSlot.Enable();
             MoveSelectedRight();
         }
 
@@ -76,7 +76,7 @@ namespace GOD
         {
             m_activeOptionSlot.LockInQueue();
             MoveSelectedRight();
-            m_activeOptionSlot.Deactivate();
+            m_activeOptionSlot.Enable();
         }
 
         private void MoveSelectedRight() {
@@ -98,9 +98,9 @@ namespace GOD
                 if (securityCounter == 100) {
                     break;
                 }
-            } while (m_activeOptionSlot.IsNotDisabled());
+            } while (m_activeOptionSlot.IsDisabled());
 
-            m_activeOptionSlot.Activate();
+            m_activeOptionSlot.Highlight();
         }
 
         private void MoveSelectedLeft() {
@@ -122,9 +122,9 @@ namespace GOD
                 if (securityCounter == 100) {
                     break;
                 }
-            } while (m_activeOptionSlot.IsNotDisabled());
+            } while (m_activeOptionSlot.IsDisabled());
 
-            m_activeOptionSlot.Activate();
+            m_activeOptionSlot.Highlight();
         }
     }
 }

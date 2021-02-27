@@ -21,12 +21,13 @@ namespace GOD
         protected KeyboardButtonState m_state = KeyboardButtonState.disabled;
         protected Animator m_animator;
         private Dictionary<KeyboardButtonState, int> m_animatorValue = new Dictionary<KeyboardButtonState, int> {
-            {KeyboardButtonState.enabled, 0 },
-            {KeyboardButtonState.disabled, 1 },
+            {KeyboardButtonState.disabled, 0 },
+            {KeyboardButtonState.enabled, 1 },
             {KeyboardButtonState.selected, 2 },
             {KeyboardButtonState.highlighted, 3 },
         };
         protected TMPro.TMP_Text m_text;
+        public int m_value;
        
         private void Awake() {
             m_animator = GetComponent<Animator>();
@@ -46,7 +47,7 @@ namespace GOD
         }
 
         public void Disable() {
-            m_state = KeyboardButtonState.enabled;
+            m_state = KeyboardButtonState.disabled;
             UpdateAnimator();
         }
 

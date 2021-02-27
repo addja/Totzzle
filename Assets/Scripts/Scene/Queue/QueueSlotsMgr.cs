@@ -23,17 +23,11 @@ namespace GOD
                 throw new UnityException("There cannot be more than one QueueSlotsMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
     
             m_queueSlots = GetComponentsInChildren<QueueSlot>();
-
-            foreach (Transform child in transform)
-            {
-                Debug.Log(child.GetType());
-                Debug.Log(child.name);
-            }
-
+            
             Assert.IsTrue(m_queueSlots.Length > 0);
             foreach (QueueSlot queueSlot in m_queueSlots)
             {
-                queueSlot.Disable();
+                queueSlot.Enable();
             }
             m_activeQueueSlotIndex = 0;
             m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
