@@ -8,6 +8,7 @@ namespace GOD
     public class QueueSlot : KeyboardButton
     {
         private OptionSlot m_cachedOptionSlot;
+        public bool m_loaded = false;
 
         public void SetSlotValue(int value, OptionSlot optionSlot)
         {
@@ -18,6 +19,8 @@ namespace GOD
                 m_cachedOptionSlot.Enable();
             }
             m_cachedOptionSlot = optionSlot;
+            m_loaded = true;
+            QueueSlotsMgr.Instance.CheckQueueLoaded();
         }
     }
 }

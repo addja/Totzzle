@@ -34,5 +34,10 @@ namespace GOD
                 m_text.text = m_counter.ToString();
             }
         }
+    
+        public override void StartCountdown()
+        {
+            m_countDownEnabled = true;
+        }
     }
 }

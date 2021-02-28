@@ -49,6 +49,7 @@ namespace GOD
         private QueueSlot[] m_queueSlots;
         private QueueSlot m_activeQueueSlot;
         private int m_activeQueueSlotIndex;
+        private bool m_queueLoaded = false;
 
         public void HighlightSlot()
         {
@@ -98,6 +99,22 @@ namespace GOD
         public void SetSlotValue(int value, OptionSlot optionSlot)
         {
             m_activeQueueSlot.SetSlotValue(value, optionSlot);
+        }
+
+        public void CheckQueueLoaded() {
+            if (m_queueLoaded) {
+                return;
+            }
+            foreach (QueueSlot queueSlot in m_queueSlots)
+            {
+               if (!queueSlot.m_loaded) {
+                    return;
+                } 
+            }
+
+            Debug.Log("queue loaded");
+            m_queueLoaded = true;
+            GridMgr.Instance.QueueLoaded();
         }
     }
 }

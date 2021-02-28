@@ -27,6 +27,8 @@ namespace GOD
             Assert.IsFalse(m_state == TriggerState.triggered); // Queue cannot be loaded after triggered
             m_state = TriggerState.enabled;
             // TODO have the tile emitting particles
+
+            UpdateTile();
         }
 
         public override void UpdateTile()
@@ -35,6 +37,7 @@ namespace GOD
             {
                 if (m_state == TriggerState.enabled)
                 {
+                    Debug.Log("Countdown on!");
                     m_state = TriggerState.triggered;
                     GridMgr.Instance.StartCountdown();
                     // TODO have the tile stop emitting particles

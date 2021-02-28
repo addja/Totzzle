@@ -89,7 +89,6 @@ namespace GOD
             Tile tile;
             m_tileMap.TryGetValue(TileIdentifier(x, y), out tile);
             return tile != null;
-
         }
 
         public void UpdateWorld()
