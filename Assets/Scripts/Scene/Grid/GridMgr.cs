@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace GOD
 {
@@ -12,6 +13,8 @@ namespace GOD
         }
 
         protected static GridMgr s_Instance;
+
+        // I think we can unify these three into a single enum
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
         protected bool m_QueueOpened = false;
@@ -39,110 +42,70 @@ namespace GOD
             s_Instance = null;
         }
 
-        private Dictionary<string, Tile> tileMap = new Dictionary<string, Tile>();
+        private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
+        private TriggerTile m_triggerTile;
 
-        private Vector2Int playerPosition = new Vector2Int();
-        private enum GameState
-        {
-            exploration, // pre queueLoaded
-            queueLoaded, // ready to go to point b
-            countdown // go to point a
-        };
-        private GameState gameState;
-
-        private string TileIdentifier(int x, int y)
+        private string TileIdentifier(float x, float y)
         {
             return x.ToString() + "/" + y.ToString();
         }
 
         private void Start()
         {
-            gameState = GameState.exploration;
-
             foreach (Tile tile in GetComponentsInChildren<Tile>())
             {
                 Vector3 tilePosition = tile.transform.position;
-                tileMap[TileIdentifier((int)tilePosition.x, (int)tilePosition.y)] = tile;
+                m_tileMap[TileIdentifier(tilePosition.x, tilePosition.y)] = tile;
+                if (tile.m_type == Tile.TileType.trigger) {
+                    Assert.IsFalse(m_triggerTile); // We only want a triggerTiler per grid
+                    m_triggerTile = (TriggerTile)tile;
+                }
             }
 
+            Assert.IsTrue(m_triggerTile); // We need one triggerTile per grid
         }
 
         public void QueueEditorClose()
         {
             m_QueueOpened = false;
-            PlayerCharacter.Instance.EnablePlayer();
+            PlayerMgr.Instance.EnablePlayer();
             QueuePanelMgr.Instance.DisableQueue();
         }
 
         public void QueueEditorOpen()
         {
             m_QueueOpened = true;
-            PlayerCharacter.Instance.DisablePlayer();
+            PlayerMgr.Instance.DisablePlayer();
             QueuePanelMgr.Instance.EnableQueue();
-            // TODO: implement queue logic. Need to load queue
-            if (gameState == GameState.exploration)
-            {
-                // assumption: Player is on a valid tile
-                Tile tile;
-                tileMap.TryGetValue(TileIdentifier(playerPosition.x, playerPosition.y), out tile);
-                if (tile.type == Tile.TileType.trigger)
-                {
-                    StartCountdown();
-                }
-                else
-                {
-                    gameState = GameState.queueLoaded;
-                }
-            }
         }
 
-        public void NewPlayerPosition(int x, int y)
+        public void QueueLoaded()
         {
-            playerPosition = new Vector2Int(x, y);
-            Tile tile; // assumption: Player moves to a valid tile
-            tileMap.TryGetValue(TileIdentifier(x, y), out tile);
-            switch (tile.type)
-            {
-                case Tile.TileType.origin:
-                    if (gameState == GameState.countdown)
-                    {
-                        Debug.Log("player wins");
-                    }
-                    break;
-                case Tile.TileType.trigger:
-                    if (gameState == GameState.queueLoaded)
-                    {
-                        StartCountdown();
-                    }
-                    break;
-                default:
-                    // nothing
-                    break;
-            }
+            m_triggerTile.EnableTrigger();
         }
 
-        public bool CanMove(int x, int y)
+        public bool CanMove(float x, float y)
         {
-            Tile tile; // assumption: Player moves to a valid tile
-            return (tileMap.TryGetValue(TileIdentifier(x, y), out tile) && tile != null);
+            Tile tile;
+            m_tileMap.TryGetValue(TileIdentifier(x, y), out tile);
+            return tile != null;
+
         }
 
         public void UpdateWorld()
         {
-            foreach (Tile tile in tileMap.Values)
+            foreach (Tile tile in m_tileMap.Values)
             {
                 if (tile != null)
                 {
-                    tile.GetComponent<Tile>().UpdateTile();
+                    tile.UpdateTile();
                 }
             }
-
         }
 
-        void StartCountdown()
+        public void StartCountdown()
         {
-            gameState = GameState.countdown;
-            foreach (Tile tile in tileMap.Values)
+            foreach (Tile tile in m_tileMap.Values)
             {
                 if (tile != null)
                 {
@@ -151,12 +114,12 @@ namespace GOD
             }
         }
 
-        void Update()
+        private void Update()
         {
             ProcessInput();
         }
 
-        void ProcessInput()
+        private void ProcessInput()
         {
             if (GridInput.Instance.Pause.Down)
             {
@@ -172,19 +135,14 @@ namespace GOD
             // else if (GridInput.Instance.QueueEditor.Down && !m_InPause) // Guille this is buggy as fuck
             else if (Input.GetKeyDown(KeyCode.Tab) && !m_InPause)
             {
-                ProcessQueueEditorInput();
-            }
-        }
-
-        void ProcessQueueEditorInput()
-        {
-            if (m_QueueOpened)
-            {
-                QueueEditorClose();
-            }
-            else
-            {
-                QueueEditorOpen();
+                if (m_QueueOpened)
+                {
+                    QueueEditorClose();
+                }
+                else
+                {
+                    QueueEditorOpen();
+                }
             }
         }
 
@@ -204,7 +162,7 @@ namespace GOD
                 UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(PauseSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
                 // stop input processing from Player an Queue
-                PlayerCharacter.Instance.DisableInput();
+                PlayerMgr.Instance.DisableInput();
                 QueuePanelMgr.Instance.DisableInput();
             }
         }
@@ -233,7 +191,7 @@ namespace GOD
             m_InPause = false;
 
             // resume input processing from Player an Queue
-            PlayerCharacter.Instance.EnableInput();
+            PlayerMgr.Instance.EnableInput();
             QueuePanelMgr.Instance.EnableInput();
         }
     }

@@ -1,68 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using TMPro;
 
-public class Tile : MonoBehaviour
+namespace GOD
 {
-    public Animator animator;
-    public TextMeshProUGUI displayText;
-
-    // TODO: this screams of polimorphism. For the moment just hacking this here
-    public enum TileType
+    public class Tile : MonoBehaviour
     {
-        countdown,
-        origin,
-        trigger,
-    }
-    public TileType type;
-    public uint counterInitialValue;
-
-    Dictionary<TileType, int> typeAnimatorDic = new Dictionary<TileType, int>{
-        {TileType.origin, -1},
-        {TileType.trigger, -2},
-        {TileType.countdown, 1},
-    };
-    bool countDownOn = false;
-    uint counter = 0;
-
-    public void StartCountdown()
-    {
-        countDownOn = true;
-    }
-
-    private void Start()
-    {
-        AnimateTile(typeAnimatorDic[type]);
-
-        if (type == TileType.countdown)
+        public enum TileType
         {
-            counter = counterInitialValue;
-            UpdateDisplayedValue(counter.ToString());
-        }
-    }
+            countdown,
+            origin,
+            trigger,
+        };
 
+        protected Animator m_animator;
+        protected TMP_Text m_text;
+        public TileType m_type;
+        protected int m_tileAnimationCode;
 
-    public void UpdateTile()
-    {
-        if (countDownOn && counter != 0)
+        protected virtual void Awake()
         {
-            counter--;
-            if (counter == 0)
-            {
-                Destroy(gameObject);
-            }
-            UpdateDisplayedValue(counter.ToString());
+            var canvas = GetComponentInChildren<Canvas>();
+            Assert.IsTrue(canvas);
+            m_text = canvas.GetComponentInChildren<TMP_Text>();
+            Assert.IsTrue(m_text);
+
+            m_animator = GetComponent<Animator>();
+            Assert.IsTrue(m_animator);
+            AnimateTile(m_tileAnimationCode);
         }
-    }
 
-    void AnimateTile(int typeAnimator)
-    {
-        animator.SetInteger("tileTypeAnimator", typeAnimator);
-    }
+        protected void AnimateTile(int m_typeAnimator)
+        {
+            m_animator.SetInteger("tileTypeAnimator", m_typeAnimator);
+        }
 
-    void UpdateDisplayedValue(string value)
-    {
-        displayText.text = value;
+        public virtual void UpdateTile() {}
+
+        public virtual void StartCountdown() {}
     }
 }

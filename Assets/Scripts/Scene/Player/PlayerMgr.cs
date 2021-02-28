@@ -4,16 +4,18 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class PlayerCharacter : MonoBehaviour
+    public class PlayerMgr : MonoBehaviour
     {
-        static protected PlayerCharacter s_Instance;
-        static public PlayerCharacter Instance { get { return s_Instance; } }
+        static protected PlayerMgr s_Instance;
+        static public PlayerMgr Instance { get { return s_Instance; } }
 
         public float timeToMove = .2f;
 
+        // We can refactor this with one enum
         protected bool m_InPause = false;
         protected bool m_InPausingProcess = false;
         protected bool isMoving = false;
+
         protected bool m_IsInputDisabled = false;
         protected Vector2 origPosition, targetPosition;
 
@@ -27,7 +29,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else if(s_Instance != this)
-                throw new UnityException("There cannot be more than one PlayerCharacter script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnDisable()
@@ -112,7 +114,6 @@ namespace GOD
 
                 isMoving = false;
                 GridMgr.Instance.UpdateWorld();
-                GridMgr.Instance.NewPlayerPosition((int)targetPosition.x, (int)targetPosition.y);
             }
         }
     }
