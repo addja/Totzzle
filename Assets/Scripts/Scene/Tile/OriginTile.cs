@@ -20,8 +20,7 @@ namespace GOD
             {
                 if (m_countDownEnabled)
                 {
-                    Debug.Log("YOU WIN");
-                    // TODO play you win screen
+                    GridMgr.Instance.Pause(GridMgr.PauseType.win);
                 }
             }
         }

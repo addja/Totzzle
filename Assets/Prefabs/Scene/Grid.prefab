@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 307264243653015555}
   - component: {fileID: 307264243653015552}
   m_Layer: 0
-  m_Name: Map
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c53528c913549d479617a6242a0a980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PauseSceneName: Menus
-  grid: {fileID: 0}
+  MenusSceneName: Menus
+  WinSceneName: Win
+  LoseSceneName: Lose
 --- !u!114 &307264243653015552
 MonoBehaviour:
   m_ObjectHideFlags: 0

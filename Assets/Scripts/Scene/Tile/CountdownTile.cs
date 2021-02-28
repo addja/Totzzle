@@ -26,8 +26,7 @@ namespace GOD
                 {
                     if (PlayerMgr.Instance.transform.position == transform.position)
                     {
-                        Debug.Log("YOU LOOSE");
-                        // TODO play you loose animation
+                        GridMgr.Instance.Pause(GridMgr.PauseType.lose);
                     }
                     Destroy(gameObject);
                 }

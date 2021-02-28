@@ -15,11 +15,20 @@ namespace GOD
         protected static GridMgr s_Instance;
 
         // I think we can unify these three into a single enum
-        protected bool m_InPause = false;
-        protected bool m_InPausingProcess = false;
         protected bool m_QueueOpened = false;
 
-        public string PauseSceneName = "";
+        public enum PauseType
+        {
+            none,
+            menus,
+            win,
+            lose
+        }
+
+        public string MenusSceneName = "";
+        public string WinSceneName = "";
+        public string LoseSceneName = "";
+        private PauseType m_currentPause = PauseType.none;
 
         void Awake()
         {
@@ -122,17 +131,23 @@ namespace GOD
         {
             if (GridInput.Instance.Pause.Down)
             {
-                if (!m_InPause)
+                switch (m_currentPause)
                 {
-                    Pause();
-                }
-                else
-                {
-                    Unpause();
+                    case PauseType.none:
+                    {
+                        Pause(PauseType.menus);
+                    }
+                    break;
+
+                    case PauseType.menus:
+                    {
+                        Unpause();
+                    }
+                    break;
                 }
             }
-            // else if (GridInput.Instance.QueueEditor.Down && !m_InPause) // Guille this is buggy as fuck
-            else if (Input.GetKeyDown(KeyCode.Tab) && !m_InPause)
+            // else if (GridInput.Instance.QueueEditor.Down && m_currentPause == PauseType.none) // Guille this is buggy as fuck
+            else if (Input.GetKeyDown(KeyCode.Tab) && m_currentPause == PauseType.none)
             {
                 if (m_QueueOpened)
                 {
@@ -145,20 +160,20 @@ namespace GOD
             }
         }
 
-        public void Pause()
+        public void Pause(PauseType pauseType)
         {
-            if (!m_InPause)
+            if (m_currentPause == PauseType.none)
             {
+                m_currentPause = pauseType;
                 GridInput.Instance.ReleaseControl(false);
                 GridInput.Instance.Pause.GainControl();
-                m_InPause = true;
 
                 // Hack for the input from the 2D Game Kit tutorial:
                 //  If the time scale is not zeroed here, the input component will register
                 //  twice the key downs.
                 Time.timeScale = 0;
 
-                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(PauseSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GetPauseSceneName(m_currentPause), UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
                 // stop input processing from Player an Queue
                 PlayerMgr.Instance.DisableInput();
@@ -172,7 +187,7 @@ namespace GOD
             if (Time.timeScale > 0)
                 return;
 
-            if (m_InPause)
+            if (m_currentPause != PauseType.none)
             {
                 StartCoroutine(UnpauseCoroutine());
             }
@@ -181,17 +196,45 @@ namespace GOD
         protected IEnumerator UnpauseCoroutine()
         {
             Time.timeScale = 1;
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(PauseSceneName);
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(GetPauseSceneName(m_currentPause));
             GridInput.Instance.GainControl();
             //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
             //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
             yield return new WaitForFixedUpdate();
             yield return new WaitForEndOfFrame();
-            m_InPause = false;
+            m_currentPause = PauseType.none;
 
             // resume input processing from Player an Queue
             PlayerMgr.Instance.EnableInput();
             QueuePanelMgr.Instance.EnableInput();
+        }
+
+        private string GetPauseSceneName(PauseType pauseType)
+        {
+            string SceneName = "";
+
+            switch (pauseType)
+            {
+                case PauseType.menus:
+                {
+                    SceneName = MenusSceneName;
+                }
+                break;
+
+                case PauseType.win:
+                {
+                    SceneName = WinSceneName;
+                }
+                break;
+
+                case PauseType.lose:
+                {
+                    SceneName = LoseSceneName;
+                }
+                break;
+            }
+
+            return SceneName;
         }
     }
 

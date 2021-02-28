@@ -12,8 +12,6 @@ namespace GOD
         public float timeToMove = .2f;
 
         // We can refactor this with one enum
-        protected bool m_InPause = false;
-        protected bool m_InPausingProcess = false;
         protected bool isMoving = false;
 
         protected bool m_IsInputDisabled = false;
@@ -59,7 +57,7 @@ namespace GOD
 
         void Update()
         {
-            if (!m_InPause && !isMoving && !m_IsInputDisabled)
+            if (!isMoving && !m_IsInputDisabled)
             {
                 ProcessPlayerMovementInput();
             }
