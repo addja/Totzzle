@@ -14,8 +14,12 @@ namespace GOD
             triggered,
         };
         private TriggerState m_state;
+        private ParticleSystem m_particleSystem;
 
         protected override void Awake() {
+            m_particleSystem = GetComponentInChildren<ParticleSystem>();
+            Assert.IsTrue(m_particleSystem);
+
             m_tileAnimationCode = -2; // Used by parent Awake
             base.Awake();
             m_state = TriggerState.disabled;
@@ -26,7 +30,7 @@ namespace GOD
         public void EnableTrigger() {
             Assert.IsFalse(m_state == TriggerState.triggered); // Queue cannot be loaded after triggered
             m_state = TriggerState.enabled;
-            // TODO have the tile emitting particles
+            m_particleSystem.Play();
 
             UpdateTile();
         }
@@ -40,7 +44,7 @@ namespace GOD
                     Debug.Log("Countdown on!");
                     m_state = TriggerState.triggered;
                     GridMgr.Instance.StartCountdown();
-                    // TODO have the tile stop emitting particles
+                    m_particleSystem.Stop();
                 }
             }
         }
