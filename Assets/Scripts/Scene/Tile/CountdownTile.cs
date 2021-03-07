@@ -6,14 +6,13 @@ namespace GOD
 {
     public class CountdownTile : Tile
     {
-        public uint m_counter = 3;
+        public int m_counter = 0;
         protected bool m_countDownEnabled = false;
 
         protected override void Awake() {
             m_tileAnimationCode = 1; // Used by parent Awake
             base.Awake();
             m_type = TileType.countdown;
-            m_text.text = m_counter.ToString();
         }
 
         public override void UpdateTile()
@@ -36,6 +35,7 @@ namespace GOD
     
         public override void StartCountdown()
         {
+            Debug.Log("Starting counting down");
             m_countDownEnabled = true;
         }
     }

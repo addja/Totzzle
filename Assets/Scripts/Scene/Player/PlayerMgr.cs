@@ -94,9 +94,9 @@ namespace GOD
         protected IEnumerator MovePlayer(Vector2 direction)
         {
             origPosition = transform.position;
-            targetPosition = origPosition + direction;
+            targetPosition = origPosition + direction.normalized * GridMgr.Instance.transform.localScale;
 
-            if (GridMgr.Instance.CanMove((int)targetPosition.x, (int)targetPosition.y))
+            if (GridMgr.Instance.CanMove(targetPosition.x, targetPosition.y))
             {
                 isMoving = true;
                 float ellapsedTime = 0;

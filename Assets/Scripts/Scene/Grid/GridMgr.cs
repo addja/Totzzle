@@ -14,9 +14,6 @@ namespace GOD
 
         protected static GridMgr s_Instance;
 
-        // I think we can unify these three into a single enum
-        protected bool m_QueueOpened = false;
-
         public enum PauseType
         {
             none,
@@ -29,6 +26,7 @@ namespace GOD
         public string WinSceneName = "";
         public string LoseSceneName = "";
         private PauseType m_currentPause = PauseType.none;
+        protected bool m_QueueOpened = false;
 
         void Awake()
         {
@@ -61,7 +59,9 @@ namespace GOD
 
         private void Start()
         {
-            foreach (Tile tile in GetComponentsInChildren<Tile>())
+            GameObject tiles = transform.Find("Tiles").gameObject;
+            Assert.IsTrue(tiles);
+            foreach (Tile tile in tiles.GetComponentsInChildren<Tile>())
             {
                 Vector3 tilePosition = tile.transform.position;
                 m_tileMap[TileIdentifier(tilePosition.x, tilePosition.y)] = tile;
@@ -96,7 +96,7 @@ namespace GOD
         public bool CanMove(float x, float y)
         {
             Tile tile;
-            m_tileMap.TryGetValue(TileIdentifier(x, y), out tile);
+            m_tileMap.TryGetValue(TileIdentifier(x,y), out tile);
             return tile != null;
         }
 
