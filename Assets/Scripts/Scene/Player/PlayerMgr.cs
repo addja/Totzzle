@@ -100,6 +100,9 @@ namespace GOD
             {
                 isMoving = true;
                 float ellapsedTime = 0;
+
+                AudioMgr.instance.Play("Step");
+
                 while (ellapsedTime < timeToMove)
                 {
                     transform.position = Vector2.Lerp(origPosition, targetPosition, (ellapsedTime / timeToMove));

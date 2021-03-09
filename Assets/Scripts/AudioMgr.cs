@@ -21,7 +21,7 @@ public class AudioMgr : MonoBehaviour
     }
 
     // We are a singleton
-    static AudioMgr instance;
+    public static AudioMgr instance;
 
     public Sound[] m_sounds;
 
@@ -42,14 +42,13 @@ public class AudioMgr : MonoBehaviour
     
     private void Start() 
     {
-        // Play("Theme");
+        Play("Theme");
     }
 
     public void Play(string soundName)
     {
         Sound sound = Array.Find(m_sounds, sound => sound.m_name == soundName);
         Assert.IsNotNull(sound);
-        instance = this;
         sound.m_audioSource.Play();
     }
 }

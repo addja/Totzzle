@@ -21,10 +21,17 @@ namespace GOD
             {
                 // TODO reactor to have more than minus one step
                 m_counter--;
+
+                // This will play several times as each countdown tile will call this.
+                // But since it happens very fast it's not noticeable.
+                //Not worth optimizing for the moment.
+                AudioMgr.instance.Play("Count down");
+
                 if (m_counter == 0)
                 {
                     if (PlayerMgr.Instance.transform.position == transform.position)
                     {
+                        AudioMgr.instance.Play("Looser");
                         GridMgr.Instance.Pause(GridMgr.PauseType.lose);
                     }
                     Destroy(gameObject);
