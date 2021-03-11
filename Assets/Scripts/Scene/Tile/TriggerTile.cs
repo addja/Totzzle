@@ -45,7 +45,7 @@ namespace GOD
                     m_state = TriggerState.triggered;
                     GridMgr.Instance.StartCountdown();
                     m_particleSystem.Stop();
-                    AudioMgr.instance.Play("Queue loaded");
+                    AudioMgr.Instance.Play("Queue loaded");
                 }
             }
         }

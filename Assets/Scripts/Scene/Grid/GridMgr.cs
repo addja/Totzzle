@@ -7,26 +7,12 @@ namespace GOD
 {
     public class GridMgr : MonoBehaviour
     {
+        // BEGIN Singleton stuff
         public static GridMgr Instance
         {
             get { return s_Instance; }
         }
-
         protected static GridMgr s_Instance;
-
-        public enum PauseType
-        {
-            none,
-            menus,
-            win,
-            lose
-        }
-
-        public string MenusSceneName = "";
-        public string WinSceneName = "";
-        public string LoseSceneName = "";
-        private PauseType m_currentPause = PauseType.none;
-        protected bool m_QueueOpened = false;
 
         void Awake()
         {
@@ -48,6 +34,22 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
+
+        public enum PauseType
+        {
+            none,
+            menus,
+            win,
+            lose
+        }
+
+        public string MenusSceneName = "";
+        public string WinSceneName = "";
+        public string LoseSceneName = "";
+        private PauseType m_currentPause = PauseType.none;
+        protected bool m_QueueOpened = false;
+
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;

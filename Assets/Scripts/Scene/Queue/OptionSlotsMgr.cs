@@ -7,6 +7,7 @@ namespace GOD
 {
     public class OptionSlotsMgr : MonoBehaviour
     {
+        // BEGIN Singleton stuff
         public static OptionSlotsMgr Instance
         {
             get { return s_Instance; }
@@ -34,6 +35,7 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
 
         private OptionSlot[] m_optionSlots;
         private OptionSlot m_activeOptionSlot;

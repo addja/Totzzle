@@ -4,22 +4,13 @@ namespace GOD
 {
     public class PlayerInput : InputComponent
     {
+        // BEGIN Singleton stuff
         public static PlayerInput Instance
         {
             get { return s_Instance; }
         }
 
         protected static PlayerInput s_Instance;
-
-        public bool HaveControl { get { return m_HaveControl; } }
-
-        public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
-        public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
-        [HideInInspector]
-
-        protected bool m_HaveControl = true;
-
-        protected bool m_DebugMenuIsOpen = false;
 
         void Awake ()
         {
@@ -41,6 +32,17 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
+
+        public bool HaveControl { get { return m_HaveControl; } }
+
+        public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
+        public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
+        [HideInInspector]
+
+        protected bool m_HaveControl = true;
+
+        protected bool m_DebugMenuIsOpen = false;
 
         protected override void GetInputs(bool fixedUpdateHappened)
         {

@@ -20,7 +20,7 @@ namespace GOD
             {
                 if (m_countDownEnabled)
                 {
-                    AudioMgr.instance.Play("Win");
+                    AudioMgr.Instance.Play("Win");
                     GridMgr.Instance.Pause(GridMgr.PauseType.win);
                 }
             }

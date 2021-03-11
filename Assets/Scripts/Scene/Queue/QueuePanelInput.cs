@@ -4,22 +4,13 @@ namespace GOD
 {
     public class QueuePanelInput : InputComponent
     {
+        // BEGIN Singleton stuff
         public static QueuePanelInput Instance
         {
             get { return s_Instance; }
         }
 
         protected static QueuePanelInput s_Instance;
-
-        public bool HaveControl { get { return m_HaveControl; } }
-
-        public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
-        public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
-        [HideInInspector]
-
-        protected bool m_HaveControl = true;
-
-        protected bool m_DebugMenuIsOpen = false;
 
         void Awake ()
         {
@@ -41,7 +32,16 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
 
+        public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
+        public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
+
+        [HideInInspector]
+        protected bool m_HaveControl = true;
+
+        protected bool m_DebugMenuIsOpen = false;
+        public bool HaveControl { get { return m_HaveControl; } }
         protected override void GetInputs(bool fixedUpdateHappened)
         {
             Horizontal.Get(inputType);

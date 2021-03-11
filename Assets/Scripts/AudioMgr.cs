@@ -20,15 +20,40 @@ public class AudioMgr : MonoBehaviour
         public AudioSource m_audioSource;
     }
 
-    // We are a singleton
-    public static AudioMgr instance;
+    // BEGIN Singleton stuff
+    public static AudioMgr Instance
+    {
+        get { return s_Instance; }
+    }
+    protected static AudioMgr s_Instance;
+
+    void SingletonAwake()
+    {
+        if (s_Instance == null)
+            s_Instance = this;
+        else
+            throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+    }
+
+    void OnEnable()
+    {
+        if (s_Instance == null)
+            s_Instance = this;
+        else if (s_Instance != this)
+            throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+    }
+
+    void OnDisable()
+    {
+        s_Instance = null;
+    }
+    // END Singleton stuff
 
     public Sound[] m_sounds;
 
     private void Awake()
     {
-        Assert.IsNull(instance);
-        instance = this;
+        SingletonAwake();
 
         foreach(Sound sound in m_sounds) {
             sound.m_audioSource = gameObject.AddComponent<AudioSource>();
@@ -37,7 +62,6 @@ public class AudioMgr : MonoBehaviour
             sound.m_audioSource.pitch = sound.m_pitch;
             sound.m_audioSource.loop = sound.m_loop;
         }
-        
     }
     
     private void Start() 

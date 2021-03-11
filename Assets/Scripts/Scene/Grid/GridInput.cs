@@ -6,21 +6,13 @@ namespace GOD
 {
     public class GridInput : InputComponent
     {
+        // BEGIN Singleton stuff
         public static GridInput Instance
         {
             get { return s_Instance; }
         }
 
         protected static GridInput s_Instance;
-
-        public bool HaveControl { get { return m_HaveControl; } }
-
-        public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);
-        public InputButton QueueEditor = new InputButton(KeyCode.Tab, XboxControllerButtons.View);
-        [HideInInspector]
-
-        protected bool m_HaveControl = true;
-        protected bool m_DebugMenuIsOpen = false;
 
         void Awake()
         {
@@ -42,6 +34,16 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
+
+        public bool HaveControl { get { return m_HaveControl; } }
+
+        public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);
+        public InputButton QueueEditor = new InputButton(KeyCode.Tab, XboxControllerButtons.View);
+        [HideInInspector]
+
+        protected bool m_HaveControl = true;
+        protected bool m_DebugMenuIsOpen = false;
 
         protected override void GetInputs(bool fixedUpdateHappened)
         {

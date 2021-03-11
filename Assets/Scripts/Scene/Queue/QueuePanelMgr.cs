@@ -7,11 +7,11 @@ namespace GOD
 {
     public class QueuePanelMgr : MonoBehaviour
     {
+        // BEGIN Singleton stuff
         public static QueuePanelMgr Instance
         {
             get { return s_Instance; }
         }
-
         protected static QueuePanelMgr s_Instance;
 
         void Awake()
@@ -34,6 +34,7 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
 
         public Image panelImage;
         public Image queueBorder;

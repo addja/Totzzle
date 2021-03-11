@@ -8,6 +8,7 @@ namespace GOD
 {
     public class QueueSlotsMgr : MonoBehaviour
     {
+        // BEGIN Singleton stuff
         public static QueueSlotsMgr Instance
         {
             get { return s_Instance; }
@@ -15,7 +16,7 @@ namespace GOD
 
         protected static QueueSlotsMgr s_Instance;
 
-        void Awake()
+        void SingletonAwake()
         {
             if (s_Instance == null)
                 s_Instance = this;
@@ -45,11 +46,27 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
 
         private QueueSlot[] m_queueSlots;
         private QueueSlot m_activeQueueSlot;
         private int m_activeQueueSlotIndex;
         private bool m_queueLoaded = false;
+
+        void Awake()
+        {
+            SingletonAwake();
+
+            m_queueSlots = GetComponentsInChildren<QueueSlot>();
+            
+            Assert.IsTrue(m_queueSlots.Length > 0);
+            foreach (QueueSlot queueSlot in m_queueSlots)
+            {
+                queueSlot.Enable();
+            }
+            m_activeQueueSlotIndex = 0;
+            m_activeQueueSlot = m_queueSlots[m_activeQueueSlotIndex];
+        }
 
         public void HighlightSlot()
         {

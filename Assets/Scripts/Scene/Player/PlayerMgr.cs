@@ -6,20 +6,16 @@ namespace GOD
 {
     public class PlayerMgr : MonoBehaviour
     {
+        // BEGIN Singleton stuff
         static protected PlayerMgr s_Instance;
         static public PlayerMgr Instance { get { return s_Instance; } }
 
-        public float timeToMove = .2f;
-
-        // We can refactor this with one enum
-        protected bool isMoving = false;
-
-        protected bool m_IsInputDisabled = false;
-        protected Vector2 origPosition, targetPosition;
-
         void Awake ()
         {
-            s_Instance = this;
+            if (s_Instance == null)
+                s_Instance = this;
+            else
+                throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnEnable()
@@ -34,6 +30,16 @@ namespace GOD
         {
             s_Instance = null;
         }
+        // END Singleton stuff
+
+        public float timeToMove = .2f;
+
+        // We can refactor this with one enum
+        protected bool isMoving = false;
+
+        protected bool m_IsInputDisabled = false;
+        protected Vector2 origPosition, targetPosition;
+
 
         public GameObject playerDisablePanel;
 
@@ -101,7 +107,7 @@ namespace GOD
                 isMoving = true;
                 float ellapsedTime = 0;
 
-                AudioMgr.instance.Play("Step");
+                AudioMgr.Instance.Play("Step");
 
                 while (ellapsedTime < timeToMove)
                 {
