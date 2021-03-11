@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aec4a89efeb86a4eb6195f1a63a24c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_value: 0
+  m_loaded: 0
 --- !u!1 &5736650915937597436
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '-'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af79b826a04deae4fbdb66e0fcb3f77c, type: 2}
+  m_sharedMaterial: {fileID: 8977307174448042025, guid: af79b826a04deae4fbdb66e0fcb3f77c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
