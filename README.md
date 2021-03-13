@@ -14,7 +14,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/addja/GOD">
-    <img src="Documentation/Images/Logo.png" alt="Logo" width="80" height="80">
+    <img src="Documentation/Images/Logo.png" alt="Logo" width="74" height="118">
   </a>
 
   <h3 align="center">GOD</h3>
@@ -56,7 +56,7 @@
     <br />
     <br />
     <br />
-    <img src="Documentation/Images/Unity.png" alt="Made with" width="375" height="249.375"/>
+    <img src="Documentation/Images/Unity.png" alt="Made with" width="551" height="300"/>
 </p>
 
 
