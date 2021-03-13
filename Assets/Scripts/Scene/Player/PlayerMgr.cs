@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace GOD
 {
@@ -10,7 +11,7 @@ namespace GOD
         static protected PlayerMgr s_Instance;
         static public PlayerMgr Instance { get { return s_Instance; } }
 
-        void Awake ()
+        private void SingletonAwake ()
         {
             if (s_Instance == null)
                 s_Instance = this;
@@ -18,7 +19,7 @@ namespace GOD
                 throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (s_Instance == null)
                 s_Instance = this;
@@ -26,7 +27,7 @@ namespace GOD
                 throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             s_Instance = null;
         }
@@ -34,14 +35,26 @@ namespace GOD
 
         public float timeToMove = .2f;
 
-        // We can refactor this with one enum
-        protected bool isMoving = false;
+        protected bool m_isMoving = false;
+        protected Animator m_animator;
 
         protected bool m_IsInputDisabled = false;
         protected Vector2 origPosition, targetPosition;
 
-
         public GameObject playerDisablePanel;
+
+        private void Awake()
+        {
+            SingletonAwake();
+
+            m_animator = GetComponentInChildren<Animator>();
+            Assert.IsNotNull(m_animator);
+            AnimatePlayer();
+        }
+
+        protected void AnimatePlayer() {
+            m_animator.SetBool("isMoving", m_isMoving);
+        }
 
         public void DisablePlayer() {
             m_IsInputDisabled = true;
@@ -63,7 +76,7 @@ namespace GOD
 
         void Update()
         {
-            if (!isMoving && !m_IsInputDisabled)
+            if (!m_isMoving && !m_IsInputDisabled)
             {
                 ProcessPlayerMovementInput();
             }
@@ -104,7 +117,8 @@ namespace GOD
 
             if (GridMgr.Instance.CanMove(targetPosition.x, targetPosition.y))
             {
-                isMoving = true;
+                m_isMoving = true;
+                AnimatePlayer();
                 float ellapsedTime = 0;
 
                 AudioMgr.Instance.Play("Step");
@@ -119,7 +133,8 @@ namespace GOD
                 // make sure there is no small jitter from lerp on final position
                 transform.position = targetPosition;
 
-                isMoving = false;
+                m_isMoving = false;
+                AnimatePlayer();
                 GridMgr.Instance.UpdateWorld();
             }
         }
