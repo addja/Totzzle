@@ -41,8 +41,6 @@ namespace GOD
         protected bool m_IsInputDisabled = false;
         protected Vector2 origPosition, targetPosition;
 
-        public GameObject playerDisablePanel;
-
         private void Awake()
         {
             SingletonAwake();
@@ -58,12 +56,10 @@ namespace GOD
 
         public void DisablePlayer() {
             m_IsInputDisabled = true;
-            playerDisablePanel.SetActive(true);
         }
 
         public void EnablePlayer() {
             m_IsInputDisabled = false;
-            playerDisablePanel.SetActive(false);
         }
 
         public void DisableInput() {
