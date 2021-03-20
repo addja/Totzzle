@@ -40,7 +40,13 @@ namespace GOD
         protected Animator m_animator;
 
         protected bool m_IsInputDisabled = false;
-        protected Vector2 origPosition, targetPosition;
+        protected Vector2 m_origPosition;
+        protected Vector2 m_targetPosition;
+        protected Vector2 m_direction;
+
+        public Vector2 MovementDirection() {
+            return m_direction;
+        }
 
         private void Awake()
         {
@@ -100,44 +106,42 @@ namespace GOD
         }
 
         void ProcessPlayerMovementInput() {
-            Vector2 direction = Vector2.zero;
-
             // Had to change this to keydown to not call a thousand times the invalid movement anim
             // if (PlayerInput.Instance.Vertical.Value > 0f)
             if (Input.GetKeyDown(KeyCode.W))
             {
-                direction = Vector2.up;
+                m_direction = Vector2.up;
             }
             // else if (PlayerInput.Instance.Vertical.Value < 0f)
             else if (Input.GetKeyDown(KeyCode.S))
             {
-                direction = Vector2.down;
+                m_direction = Vector2.down;
             }
             // else if (PlayerInput.Instance.Horizontal.Value < 0f)
             else if (Input.GetKeyDown(KeyCode.A))
             {
-                direction = Vector2.left;
+                m_direction = Vector2.left;
             }
             // else if (PlayerInput.Instance.Horizontal.Value > 0f)
             else if (Input.GetKeyDown(KeyCode.D))
             {
-                direction = Vector2.right;
+                m_direction = Vector2.right;
             }
             else
             {
                 return;
             }
 
-            StartCoroutine(MovePlayer(direction));
+            StartCoroutine(MovePlayer());
         }
 
         // fancy coroutine
-        protected IEnumerator MovePlayer(Vector2 direction)
+        protected IEnumerator MovePlayer()
         {
-            origPosition = transform.position;
-            targetPosition = origPosition + direction.normalized * PuzzleMgr.Instance.transform.localScale;
+            m_origPosition = transform.position;
+            m_targetPosition = m_origPosition + m_direction.normalized * PuzzleMgr.Instance.transform.localScale;
 
-            if (PuzzleMgr.Instance.CanMove(targetPosition.x, targetPosition.y))
+            if (PuzzleMgr.Instance.CanMove(m_targetPosition.x, m_targetPosition.y))
             {
                 m_isBusy = true;
                 AnimatePlayer(PlayerAnimation.move);
@@ -147,13 +151,13 @@ namespace GOD
 
                 while (ellapsedTime < m_timeToMove)
                 {
-                    transform.position = Vector2.Lerp(origPosition, targetPosition, (ellapsedTime / m_timeToMove));
+                    transform.position = Vector2.Lerp(m_origPosition, m_targetPosition, (ellapsedTime / m_timeToMove));
                     ellapsedTime += Time.deltaTime;
                     yield return null;
                 }
 
                 // make sure there is no small jitter from lerp on final position
-                transform.position = targetPosition;
+                transform.position = m_targetPosition;
 
                 m_isBusy = false;
                 AnimatePlayer(PlayerAnimation.idle);

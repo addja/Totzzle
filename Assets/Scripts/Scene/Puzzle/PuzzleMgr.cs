@@ -112,7 +112,39 @@ namespace GOD
         {
             Tile tile;
             m_tileMap.TryGetValue(TileIdentifier(x,y), out tile);
-            return tile != null;
+            if (tile == null)
+            {
+                return false;
+            };
+            Item item = ItemInTile(x, y);
+            if (item != null) {
+                if (!item.IsMovable()) {
+                    return false;
+                }
+
+                Vector2 direction = PlayerMgr.Instance.MovementDirection().normalized;
+                direction *= PuzzleMgr.Instance.transform.localScale;
+                return CanMove(x+direction.x,y+direction.y);
+            }
+
+            return true;
+        }
+
+        private Item ItemInTile(float x, float y)
+        {
+            foreach (Item item in m_items)
+            {
+                if (item == null) {
+                    continue;
+                }
+                Vector3 itemPosition = item.transform.position;
+                if (itemPosition.x == x && itemPosition.y == y)
+                {
+                    return item;
+                }
+            }
+
+            return null;
         }
 
         public void UpdateWorld()

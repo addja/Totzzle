@@ -8,4 +8,9 @@ public class CounterModifier : Item
     {
         Destroy(gameObject);
     }
+
+    private void Awake()
+    {
+        m_isMovable = true;
+    }
 }
