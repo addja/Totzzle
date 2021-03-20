@@ -135,9 +135,9 @@ namespace GOD
         protected IEnumerator MovePlayer(Vector2 direction)
         {
             origPosition = transform.position;
-            targetPosition = origPosition + direction.normalized * GridMgr.Instance.transform.localScale;
+            targetPosition = origPosition + direction.normalized * PuzzleMgr.Instance.transform.localScale;
 
-            if (GridMgr.Instance.CanMove(targetPosition.x, targetPosition.y))
+            if (PuzzleMgr.Instance.CanMove(targetPosition.x, targetPosition.y))
             {
                 m_isBusy = true;
                 AnimatePlayer(PlayerAnimation.move);
@@ -157,7 +157,7 @@ namespace GOD
 
                 m_isBusy = false;
                 AnimatePlayer(PlayerAnimation.idle);
-                GridMgr.Instance.UpdateWorld();
+                PuzzleMgr.Instance.UpdateWorld();
             } else {
                 AnimatePlayer(PlayerAnimation.invalid);
                 float ellapsedTime = 0;

@@ -8,7 +8,7 @@ namespace GOD
     {
         public void ExitPause()
         {
-            GridMgr.Instance.Unpause();
+            PuzzleMgr.Instance.Unpause();
         }
 
         public void RestartLevel()

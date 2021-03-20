@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class GridInput : InputComponent
+    public class PuzzleInput : InputComponent
     {
         // BEGIN Singleton stuff
-        public static GridInput Instance
+        public static PuzzleInput Instance
         {
             get { return s_Instance; }
         }
 
-        protected static GridInput s_Instance;
+        protected static PuzzleInput s_Instance;
 
         void Awake()
         {
             if (s_Instance == null)
                 s_Instance = this;
             else
-                throw new UnityException("There cannot be more than one GridInput script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one PuzzleInput script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnEnable()
@@ -27,7 +27,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one GridInput script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one PuzzleInput script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnDisable()

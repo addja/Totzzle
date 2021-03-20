@@ -32,7 +32,7 @@ namespace GOD
                     if (PlayerMgr.Instance.transform.position == transform.position)
                     {
                         AudioMgr.Instance.Play("Looser");
-                        GridMgr.Instance.Pause(GridMgr.PauseType.lose);
+                        PuzzleMgr.Instance.Pause(PuzzleMgr.PauseType.lose);
                     }
                     Destroy(gameObject);
                 }

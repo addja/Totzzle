@@ -131,7 +131,7 @@ namespace GOD
 
             Debug.Log("queue loaded");
             m_queueLoaded = true;
-            GridMgr.Instance.QueueLoaded();
+            PuzzleMgr.Instance.QueueLoaded();
         }
     }
 }

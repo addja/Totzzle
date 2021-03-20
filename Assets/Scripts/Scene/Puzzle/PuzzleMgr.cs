@@ -5,21 +5,21 @@ using UnityEngine.Assertions;
 
 namespace GOD
 {
-    public class GridMgr : MonoBehaviour
+    public class PuzzleMgr : MonoBehaviour
     {
         // BEGIN Singleton stuff
-        public static GridMgr Instance
+        public static PuzzleMgr Instance
         {
             get { return s_Instance; }
         }
-        protected static GridMgr s_Instance;
+        protected static PuzzleMgr s_Instance;
 
         void Awake()
         {
             if (s_Instance == null)
                 s_Instance = this;
             else
-                throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one PuzzleMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnEnable()
@@ -27,7 +27,7 @@ namespace GOD
             if (s_Instance == null)
                 s_Instance = this;
             else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
+                throw new UnityException("There cannot be more than one PuzzleMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
         }
 
         void OnDisable()
@@ -131,7 +131,7 @@ namespace GOD
 
         private void ProcessInput()
         {
-            if (GridInput.Instance.Pause.Down)
+            if (PuzzleInput.Instance.Pause.Down)
             {
                 switch (m_currentPause)
                 {
@@ -148,7 +148,7 @@ namespace GOD
                     break;
                 }
             }
-            // else if (GridInput.Instance.QueueEditor.Down && m_currentPause == PauseType.none) // Guille this is buggy as fuck
+            // else if (PuzzleInput.Instance.QueueEditor.Down && m_currentPause == PauseType.none) // Guille this is buggy as fuck
             else if (Input.GetKeyDown(KeyCode.Tab) && m_currentPause == PauseType.none)
             {
                 if (m_QueueOpened)
@@ -167,8 +167,8 @@ namespace GOD
             if (m_currentPause == PauseType.none)
             {
                 m_currentPause = pauseType;
-                GridInput.Instance.ReleaseControl(false);
-                GridInput.Instance.Pause.GainControl();
+                PuzzleInput.Instance.ReleaseControl(false);
+                PuzzleInput.Instance.Pause.GainControl();
 
                 // Hack for the input from the 2D Game Kit tutorial:
                 //  If the time scale is not zeroed here, the input component will register
@@ -199,7 +199,7 @@ namespace GOD
         {
             Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(GetPauseSceneName(m_currentPause));
-            GridInput.Instance.GainControl();
+            PuzzleInput.Instance.GainControl();
             //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
             //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
             yield return new WaitForFixedUpdate();

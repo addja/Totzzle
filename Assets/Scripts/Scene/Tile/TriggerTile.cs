@@ -43,7 +43,7 @@ namespace GOD
                 {
                     Debug.Log("Countdown on!");
                     m_state = TriggerState.triggered;
-                    GridMgr.Instance.StartCountdown();
+                    PuzzleMgr.Instance.StartCountdown();
                     m_particleSystem.Stop();
                     AudioMgr.Instance.Play("Queue loaded");
                 }

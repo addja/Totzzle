@@ -21,7 +21,7 @@ namespace GOD
                 if (m_countDownEnabled)
                 {
                     AudioMgr.Instance.Play("Win");
-                    GridMgr.Instance.Pause(GridMgr.PauseType.win);
+                    PuzzleMgr.Instance.Pause(PuzzleMgr.PauseType.win);
                 }
             }
         }
