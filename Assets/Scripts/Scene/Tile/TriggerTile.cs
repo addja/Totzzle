@@ -35,6 +35,14 @@ namespace GOD
             UpdateTile();
         }
 
+        public void DisableTrigger() {
+            Assert.IsFalse(m_state == TriggerState.triggered); // Queue cannot be unloaded after triggered
+            m_state = TriggerState.disabled;
+            m_particleSystem.Stop();
+
+            UpdateTile();
+        }
+
         public override void UpdateTile()
         {
             if (PlayerMgr.Instance.transform.position == transform.position)

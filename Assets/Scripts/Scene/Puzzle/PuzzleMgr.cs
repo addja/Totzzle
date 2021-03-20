@@ -5,37 +5,8 @@ using UnityEngine.Assertions;
 
 namespace GOD
 {
-    public class PuzzleMgr : MonoBehaviour
+    public class PuzzleMgr : Singleton<PuzzleMgr>
     {
-        // BEGIN Singleton stuff
-        public static PuzzleMgr Instance
-        {
-            get { return s_Instance; }
-        }
-        protected static PuzzleMgr s_Instance;
-
-        void Awake()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else
-                throw new UnityException("There cannot be more than one PuzzleMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnEnable()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one PuzzleMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnDisable()
-        {
-            s_Instance = null;
-        }
-        // END Singleton stuff
-
         public enum PauseType
         {
             none,
@@ -48,8 +19,8 @@ namespace GOD
         public string WinSceneName = "";
         public string LoseSceneName = "";
         private PauseType m_currentPause = PauseType.none;
-        protected bool m_QueueOpened = false;
-
+        private bool m_QueueOpened = false;
+        private bool m_countdownStarted = false;
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;
@@ -59,8 +30,10 @@ namespace GOD
             return x.ToString() + "/" + y.ToString();
         }
 
-        private void Start()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             GameObject tiles = transform.Find("Tiles").gameObject;
             Assert.IsTrue(tiles);
             foreach (Tile tile in tiles.GetComponentsInChildren<Tile>())
@@ -74,25 +47,48 @@ namespace GOD
             }
 
             Assert.IsTrue(m_triggerTile); // We need one triggerTile per grid
+
+            // Restore the hack for the input from the 2D Game Kit tutorial
+            //  in those cases when we leave the level in the middle of a pause.
+            Time.timeScale = 1;
+
+            HUDMgr hudMgr = HUDMgr.Instance;
+            Assert.IsTrue(hudMgr); // We need the HUD manager.
+            PlayerMgr playerMgr = PlayerMgr.Instance;
+            Assert.IsTrue(playerMgr); // We need the player manager.
+
+            if (hudMgr.m_state != HUDMgr.State.idle)
+            {
+                m_QueueOpened = true;
+                playerMgr.DisablePlayer();
+            }
+            else
+            {
+                playerMgr.EnablePlayer();
+            }
+
+            hudMgr.m_queueLoadedEvent.AddListener(() => m_triggerTile.EnableTrigger());
+            hudMgr.m_queueUnloadedEvent.AddListener(() => m_triggerTile.DisableTrigger());
         }
 
         public void QueueEditorClose()
         {
-            m_QueueOpened = false;
-            PlayerMgr.Instance.EnablePlayer();
-            QueuePanelMgr.Instance.DisableQueue();
+            if (m_QueueOpened)
+            {
+                m_QueueOpened = false;
+                PlayerMgr.Instance.EnablePlayer();
+                HUDMgr.Instance.SetState(HUDMgr.State.idle);
+            }
         }
 
         public void QueueEditorOpen()
         {
-            m_QueueOpened = true;
-            PlayerMgr.Instance.DisablePlayer();
-            QueuePanelMgr.Instance.EnableQueue();
-        }
-
-        public void QueueLoaded()
-        {
-            m_triggerTile.EnableTrigger();
+            if (!m_QueueOpened && !m_countdownStarted)
+            {
+                m_QueueOpened = true;
+                PlayerMgr.Instance.DisablePlayer();
+                HUDMgr.Instance.SetState(HUDMgr.State.queue);
+            }
         }
 
         public bool CanMove(float x, float y)
@@ -111,16 +107,28 @@ namespace GOD
                     tile.UpdateTile();
                 }
             }
+
+            if (m_countdownStarted)
+            {
+                foreach (Tile tile in m_tileMap.Values)
+                {
+                    if (tile != null)
+                    {
+                        tile.StartCountdown();
+                    }
+                }
+            }
         }
 
         public void StartCountdown()
         {
-            foreach (Tile tile in m_tileMap.Values)
+            if (!m_countdownStarted)
             {
-                if (tile != null)
-                {
-                    tile.StartCountdown();
-                }
+                m_countdownStarted = true;
+
+                QueueEditorClose();
+
+                AudioMgr.Instance.Play("Count down");
             }
         }
 
@@ -162,6 +170,21 @@ namespace GOD
             }
         }
 
+        public void Reset()
+        {
+            if (m_QueueOpened)
+            {
+                QueueEditorClose();
+            }
+
+            if (m_currentPause != PauseType.none)
+            {
+                Unpause();
+            }
+
+            SceneMgr.RestartScene();
+        }
+
         public void Pause(PauseType pauseType)
         {
             if (m_currentPause == PauseType.none)
@@ -170,16 +193,22 @@ namespace GOD
                 PuzzleInput.Instance.ReleaseControl(false);
                 PuzzleInput.Instance.Pause.GainControl();
 
+                // stop input processing from Player an Queue
+                if (!m_QueueOpened)
+                {
+                    PlayerMgr.Instance.DisableInput();
+                }
+                else
+                {
+                    HUDMgr.Instance.DisableInput();
+                }
+
                 // Hack for the input from the 2D Game Kit tutorial:
                 //  If the time scale is not zeroed here, the input component will register
                 //  twice the key downs.
                 Time.timeScale = 0;
 
                 UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GetPauseSceneName(m_currentPause), UnityEngine.SceneManagement.LoadSceneMode.Additive);
-
-                // stop input processing from Player an Queue
-                PlayerMgr.Instance.DisableInput();
-                QueuePanelMgr.Instance.DisableInput();
             }
         }
 
@@ -200,15 +229,22 @@ namespace GOD
             Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(GetPauseSceneName(m_currentPause));
             PuzzleInput.Instance.GainControl();
+
+            // resume input processing from Player an Queue
+            if (!m_QueueOpened)
+            {
+                PlayerMgr.Instance.EnableInput();
+            }
+            else
+            {
+                HUDMgr.Instance.EnableInput();
+            }
+
             //we have to wait for a fixed update so the pause button state change, otherwise we can get in case were the update
             //of this script happen BEFORE the input is updated, leading to setting the game in pause once again
             yield return new WaitForFixedUpdate();
             yield return new WaitForEndOfFrame();
             m_currentPause = PauseType.none;
-
-            // resume input processing from Player an Queue
-            PlayerMgr.Instance.EnableInput();
-            QueuePanelMgr.Instance.EnableInput();
         }
 
         private string GetPauseSceneName(PauseType pauseType)

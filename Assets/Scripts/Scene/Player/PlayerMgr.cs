@@ -5,34 +5,8 @@ using UnityEngine.Assertions;
 
 namespace GOD
 {
-    public class PlayerMgr : MonoBehaviour
+    public class PlayerMgr : Singleton<PlayerMgr>
     {
-        // BEGIN Singleton stuff
-        static protected PlayerMgr s_Instance;
-        static public PlayerMgr Instance { get { return s_Instance; } }
-
-        private void SingletonAwake ()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else
-                throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        private void OnEnable()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else if(s_Instance != this)
-                throw new UnityException("There cannot be more than one PlayerMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        private void OnDisable()
-        {
-            s_Instance = null;
-        }
-        // END Singleton stuff
-
         public float m_timeToMove = .2f;
         public float m_timeInvalidAnim = .2f;
 
@@ -42,9 +16,9 @@ namespace GOD
         protected bool m_IsInputDisabled = false;
         protected Vector2 origPosition, targetPosition;
 
-        private void Awake()
+        protected override void Awake()
         {
-            SingletonAwake();
+            base.Awake();
 
             m_animator = GetComponentInChildren<Animator>();
             Assert.IsNotNull(m_animator);
