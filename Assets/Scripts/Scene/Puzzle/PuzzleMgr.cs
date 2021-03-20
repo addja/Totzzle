@@ -53,6 +53,10 @@ namespace GOD
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;
+        
+        // TODO: We can do better than a list efficy-wise
+        // Leaving for the moment as we are focused on bring-up
+        private List<Item> m_items = new List<Item>(); 
 
         private string TileIdentifier(float x, float y)
         {
@@ -71,6 +75,15 @@ namespace GOD
                     Assert.IsFalse(m_triggerTile); // We only want a triggerTiler per grid
                     m_triggerTile = (TriggerTile)tile;
                 }
+            }
+
+            Assert.IsTrue(m_triggerTile); // We need one triggerTile per grid
+
+            GameObject items = transform.Find("Items").gameObject;
+            Assert.IsTrue(items);
+            foreach (Item item in items.GetComponentsInChildren<Item>())
+            {
+                m_items.Add(item);
             }
 
             Assert.IsTrue(m_triggerTile); // We need one triggerTile per grid
@@ -120,6 +133,13 @@ namespace GOD
                 if (tile != null)
                 {
                     tile.StartCountdown();
+                }
+            }
+            foreach (Item item in m_items)
+            {
+                if (item != null)
+                {
+                    item.StartCountdown();
                 }
             }
         }
