@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -162,7 +161,7 @@ namespace GOD
                 Assert.IsNotNull(counterModifier);
                 // Assumption: We can only collide if we are moving the player, who checks if the object
                 // can be moved. We can extend this to bounch back in the future
-                counterModifier.Move(m_direction.normalized * PuzzleMgr.Instance.transform.localScale);
+                counterModifier.Move(m_direction * PuzzleMgr.Instance.transform.localScale);
             }
         }
     }

@@ -120,7 +120,7 @@ namespace GOD
                 direction *= PuzzleMgr.Instance.transform.localScale;
                 return CanMove(x+direction.x,y+direction.y);
             }
-
+                                 
             return true;
         }
 
