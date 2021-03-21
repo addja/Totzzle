@@ -15,12 +15,7 @@ namespace GOD
 
 		public List<OptionSlot> GetOptions()
 		{
-			return m_Slots.ConvertAll<OptionSlot>(
-				delegate(Slot slot)
-				{
-					return (OptionSlot)slot;
-				}
-			);
+			return m_Slots.ConvertAll<OptionSlot>((Slot slot) => (OptionSlot)slot);
 		}
 
 		public bool HasNoContainerOptions()

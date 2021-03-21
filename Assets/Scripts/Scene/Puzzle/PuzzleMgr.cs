@@ -21,6 +21,7 @@ namespace GOD
         private PauseType m_currentPause = PauseType.none;
         private bool m_QueueOpened = false;
         private bool m_countdownStarted = false;
+        private bool m_countdownStartedProcessed = true;
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;
@@ -151,7 +152,7 @@ namespace GOD
                 }
             }
 
-            if (m_countdownStarted)
+            if (!m_countdownStartedProcessed)
             {
                 foreach (Tile tile in m_tileMap.Values)
                 {
@@ -161,13 +162,7 @@ namespace GOD
                     }
                 }
 
-                foreach (Item item in m_items)
-                {
-                    if (item != null)
-                    {
-                        item.StartCountdown();
-                    }
-                }
+                m_countdownStartedProcessed = true;
             }
         }
 
@@ -182,6 +177,16 @@ namespace GOD
                 HUDMgr.Instance.SetState(HUDMgr.State.countdown);
 
                 AudioMgr.Instance.Play("Count down");
+
+                foreach (Item item in m_items)
+                {
+                    if (item != null)
+                    {
+                        item.StartCountdown();
+                    }
+                }
+
+                m_countdownStartedProcessed = false;
             }
         }
 

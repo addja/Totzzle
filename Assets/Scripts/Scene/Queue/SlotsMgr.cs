@@ -82,22 +82,12 @@ namespace GOD
 
 		public void EnableInput()
 		{
-			m_Slots.ForEach(
-				delegate(Slot slot)
-				{
-					slot.EnableInput();
-				}
-			);
+			m_Slots.ForEach((Slot slot) => slot.EnableInput());
 		}
 
 		public void DisableInput()
 		{
-			m_Slots.ForEach(
-				delegate(Slot slot)
-				{
-					slot.DisableInput();
-				}
-			);
+			m_Slots.ForEach((Slot slot) => slot.DisableInput());
 		}
 	}
 }

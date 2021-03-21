@@ -61,96 +61,8 @@ namespace GOD
 		{
 			if (m_state != state)
 			{
-				switch (m_state)
-				{
-					case State.idle:
-					{
-						switch (state)
-						{
-							case State.queue:
-							{
-								ContainerMgr.Instance.Enter();
-							}
-							break;
-
-							case State.options:
-							{
-								OptionsMgr.Instance.Enter();
-							}
-							break;
-
-							case State.countdown:
-							{
-								OptionsMgr.Instance.SetActive(false);
-							}
-							break;
-						}
-					}
-					break;
-
-					case State.queue:
-					{
-						ContainerMgr.Instance.Exit();
-
-						switch (state)
-						{
-							case State.options:
-							{
-								OptionsMgr.Instance.Enter();
-							}
-							break;
-
-							case State.countdown:
-							{
-								OptionsMgr.Instance.SetActive(false);
-							}
-							break;
-						}
-					}
-					break;
-
-					case State.options:
-					{
-						OptionsMgr.Instance.Exit();
-
-						switch (state)
-						{
-							case State.queue:
-							{
-								ContainerMgr.Instance.Enter();
-							}
-							break;
-
-							case State.countdown:
-							{
-								OptionsMgr.Instance.SetActive(false);
-							}
-							break;
-						}
-					}
-					break;
-
-					case State.countdown:
-					{
-						OptionsMgr.Instance.SetActive(true);
-
-						switch (state)
-						{
-							case State.queue:
-							{
-								ContainerMgr.Instance.Enter();
-							}
-							break;
-
-							case State.countdown:
-							{
-								OptionsMgr.Instance.Enter();
-							}
-							break;
-						}
-					}
-					break;
-				}
+				ExitState(m_state);
+				EnterState(state);
 
 				m_state = state;
 			}
@@ -187,6 +99,54 @@ namespace GOD
 				case State.options:
 				{
 					OptionsMgr.Instance.DisableInput();
+				}
+				break;
+			}
+		}
+
+		private void ExitState(State state)
+		{
+			switch (state)
+			{
+				case State.queue:
+				{
+					ContainerMgr.Instance.Exit();
+				}
+				break;
+
+				case State.options:
+				{
+					OptionsMgr.Instance.Exit();
+				}
+				break;
+
+				case State.countdown:
+				{
+					OptionsMgr.Instance.SetActive(true);
+				}
+				break;
+			}
+		}
+
+		private void EnterState(State state)
+		{
+			switch (state)
+			{
+				case State.queue:
+				{
+					ContainerMgr.Instance.Enter();
+				}
+				break;
+
+				case State.options:
+				{
+					OptionsMgr.Instance.Enter();
+				}
+				break;
+
+				case State.countdown:
+				{
+					OptionsMgr.Instance.SetActive(false);
 				}
 				break;
 			}

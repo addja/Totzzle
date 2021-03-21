@@ -37,13 +37,8 @@ namespace GOD
 
 		public List<ContainerSlot> GetContainers()
 		{
-			return m_Slots.ConvertAll<ContainerSlot>(
-				delegate(Slot slot)
-				{
-					return (ContainerSlot)slot;
+			return m_Slots.ConvertAll<ContainerSlot>((Slot slot) => (ContainerSlot)slot);
 				}
-			);
-		}
 
 		public bool AreContainersFilled()
 		{
@@ -74,17 +69,14 @@ namespace GOD
 
 		private void CheckContainers()
 		{
-			SetContainerFilled(
+			SetContainersFilled(
 				GetContainers().TrueForAll(
-					delegate(ContainerSlot container)
-					{
-						return container.HasOption();
-					}
+					(ContainerSlot container) => container.HasOption()
 				)
 			);
 		}
 
-		private void SetContainerFilled(bool containerFilled)
+		private void SetContainersFilled(bool containerFilled)
 		{
 			if (m_containersFilled != containerFilled)
 			{
