@@ -13,8 +13,7 @@ namespace GOD
 
         public void RestartLevel()
         {
-            ExitPause();
-            SceneMgr.RestartScene();
+            PuzzleMgr.Instance.Reset();
         }
     }
 }

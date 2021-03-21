@@ -2,26 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 namespace GOD
 {
-    public class OptionSlot : KeyboardButton
-    {
-        public void LockInQueue()
-        {
-            base.Disable();
-            QueueSlotsMgr.Instance.SetSlotValue(m_value, this);
-        }
+	public class OptionSlot : Slot
+	{
+		protected ContainerSlot m_container;
 
-        public bool IsDisabled()
-        {
-            return m_state == KeyboardButtonState.disabled;
-        }
+		public ContainerSlot GetContainer()
+		{
+			return m_container;
+		}
 
-        [ExecuteInEditMode] // This seems to only execute in game
-        private void Update() {
-            m_text.text = m_value.ToString();
-        }
+		public void SetContainer(ContainerSlot container)
+		{
+			if (m_container != container)
+			{
+				m_container = container;
+			}
+		}
 
-    }
+		public bool HasContainer()
+		{
+			return (GetContainer() != null);
+		}
+
+		protected override void Awake()
+		{
+			base.Awake();
+
+			m_container = null;
+		}
+
+		protected override void OnClick()
+		{
+			ContainerMgr	containerMgr	= ContainerMgr.Instance;
+			ContainerSlot	container		= containerMgr.GetActiveContainer();
+			OptionSlot		option			= container.GetOption();
+
+			if (option != null)
+			{
+				option.SetContainer(null);
+				option.Enable();
+			}
+
+			Disable();
+			SetContainer(container);
+			container.SetOption(this);
+			containerMgr.SetActive(container);
+			HUDMgr.Instance.SetState(HUDMgr.State.queue);
+		}
+	}
 }

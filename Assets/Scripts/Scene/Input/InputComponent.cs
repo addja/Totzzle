@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GOD
 {
-    public abstract class InputComponent : MonoBehaviour
+    public abstract class InputComponent<T> : Singleton<T> where T : MonoBehaviour
     {
         public enum InputType
         {

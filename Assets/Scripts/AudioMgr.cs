@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Audio;
 using UnityEngine;
 
-public class AudioMgr : MonoBehaviour
+public class AudioMgr : Singleton<AudioMgr>
 {
     [System.Serializable]
     public class Sound {
@@ -20,40 +20,11 @@ public class AudioMgr : MonoBehaviour
         public AudioSource m_audioSource;
     }
 
-    // BEGIN Singleton stuff
-    public static AudioMgr Instance
-    {
-        get { return s_Instance; }
-    }
-    protected static AudioMgr s_Instance;
-
-    void SingletonAwake()
-    {
-        if (s_Instance == null)
-            s_Instance = this;
-        else
-            throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-    }
-
-    void OnEnable()
-    {
-        if (s_Instance == null)
-            s_Instance = this;
-        else if (s_Instance != this)
-            throw new UnityException("There cannot be more than one GridMgr script.  The instances are " + s_Instance.name + " and " + name + ".");
-    }
-
-    void OnDisable()
-    {
-        s_Instance = null;
-    }
-    // END Singleton stuff
-
     public Sound[] m_sounds;
 
-    private void Awake()
+    protected override void Awake()
     {
-        SingletonAwake();
+        base.Awake();
 
         foreach(Sound sound in m_sounds) {
             sound.m_audioSource = gameObject.AddComponent<AudioSource>();

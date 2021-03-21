@@ -4,38 +4,8 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class PuzzleInput : InputComponent
+    public class PuzzleInput : InputComponent<PuzzleInput>
     {
-        // BEGIN Singleton stuff
-        public static PuzzleInput Instance
-        {
-            get { return s_Instance; }
-        }
-
-        protected static PuzzleInput s_Instance;
-
-        void Awake()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else
-                throw new UnityException("There cannot be more than one PuzzleInput script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnEnable()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else if (s_Instance != this)
-                throw new UnityException("There cannot be more than one PuzzleInput script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnDisable()
-        {
-            s_Instance = null;
-        }
-        // END Singleton stuff
-
         public bool HaveControl { get { return m_HaveControl; } }
 
         public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);

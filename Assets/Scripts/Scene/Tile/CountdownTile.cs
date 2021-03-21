@@ -20,12 +20,7 @@ namespace GOD
             if (m_countDownEnabled && m_counter != 0)
             {
                 // TODO reactor to have more than minus one step
-                m_counter--;
-
-                // This will play several times as each countdown tile will call this.
-                // But since it happens very fast it's not noticeable.
-                //Not worth optimizing for the moment.
-                AudioMgr.Instance.Play("Count down");
+                --m_counter;
 
                 if (m_counter == 0)
                 {
@@ -42,7 +37,6 @@ namespace GOD
     
         public override void StartCountdown()
         {
-            Debug.Log("Starting counting down");
             m_countDownEnabled = true;
         }
     }

@@ -2,38 +2,8 @@
 
 namespace GOD
 {
-    public class PlayerInput : InputComponent
+    public class PlayerInput : InputComponent<PlayerInput>
     {
-        // BEGIN Singleton stuff
-        public static PlayerInput Instance
-        {
-            get { return s_Instance; }
-        }
-
-        protected static PlayerInput s_Instance;
-
-        void Awake ()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else
-                throw new UnityException("There cannot be more than one PlayerInput script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnEnable()
-        {
-            if (s_Instance == null)
-                s_Instance = this;
-            else if(s_Instance != this)
-                throw new UnityException("There cannot be more than one PlayerInput script.  The instances are " + s_Instance.name + " and " + name + ".");
-        }
-
-        void OnDisable()
-        {
-            s_Instance = null;
-        }
-        // END Singleton stuff
-
         public bool HaveControl { get { return m_HaveControl; } }
 
         public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
