@@ -113,7 +113,8 @@ namespace GOD
         protected IEnumerator MovePlayer()
         {
             m_origPosition = transform.position;
-            m_targetPosition = m_origPosition + m_direction.normalized * PuzzleMgr.Instance.transform.localScale;
+            m_targetPosition = m_origPosition + 
+                m_direction.normalized * PuzzleMgr.Instance.transform.localScale;
 
             if (PuzzleMgr.Instance.CanMove(m_targetPosition.x, m_targetPosition.y))
             {
@@ -150,6 +151,18 @@ namespace GOD
                 }
                 m_isBusy = false;
                 AnimatePlayer(PlayerAnimation.idle);
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D other) {
+            // If more objects to be entering this if, use tags
+            if (other.collider.name == "CounterModifier")
+            {
+                var counterModifier = other.collider.gameObject.GetComponent<CounterModifier>();
+                Assert.IsNotNull(counterModifier);
+                // Assumption: We can only collide if we are moving the player, who checks if the object
+                // can be moved. We can extend this to bounch back in the future
+                counterModifier.Move(m_direction.normalized * PuzzleMgr.Instance.transform.localScale);
             }
         }
     }
