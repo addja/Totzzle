@@ -150,17 +150,6 @@ namespace GOD
                     tile.UpdateTile();
                 }
             }
-
-            if (m_countdownStarted)
-            {
-                foreach (Tile tile in m_tileMap.Values)
-                {
-                    if (tile != null)
-                    {
-                        tile.StartCountdown();
-                    }
-                }
-            }
         }
 
         public void StartCountdown()
@@ -171,13 +160,24 @@ namespace GOD
 
                 QueueEditorClose();
 
+                HUDMgr.Instance.SetState(HUDMgr.State.countdown);
+
                 AudioMgr.Instance.Play("Count down");
-            }
-            foreach (Item item in m_items)
-            {
-                if (item != null)
+
+                foreach (Tile tile in m_tileMap.Values)
                 {
-                    item.StartCountdown();
+                    if (tile != null)
+                    {
+                        tile.StartCountdown();
+                    }
+                }
+
+                foreach (Item item in m_items)
+                {
+                    if (item != null)
+                    {
+                        item.StartCountdown();
+                    }
                 }
             }
         }
