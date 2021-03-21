@@ -75,6 +75,11 @@ namespace GOD
 			DisableInput();
 		}
 
+		public void SetActive(bool active)
+		{
+			this.gameObject.SetActive(active);
+		}
+
 		public void EnableInput()
 		{
 			m_Slots.ForEach(

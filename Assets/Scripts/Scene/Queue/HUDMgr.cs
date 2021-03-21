@@ -15,6 +15,7 @@ namespace GOD
 			idle,
 			queue,
 			options,
+			countdown
 		}
 		public State m_state;
 		public UnityEvent m_queueLoadedEvent;
@@ -29,7 +30,11 @@ namespace GOD
 			if (current != State.idle)
 			{
 				m_state = State.idle;
-				SetState(current);
+
+				if (current != State.countdown)
+				{
+					SetState(current);
+				}
 			}
 
 			if (m_queueLoadedEvent == null)
@@ -73,24 +78,31 @@ namespace GOD
 								OptionsMgr.Instance.Enter();
 							}
 							break;
+
+							case State.countdown:
+							{
+								OptionsMgr.Instance.SetActive(false);
+							}
+							break;
 						}
 					}
 					break;
 
 					case State.queue:
 					{
+						ContainerMgr.Instance.Exit();
+
 						switch (state)
 						{
-							case State.idle:
+							case State.options:
 							{
-								ContainerMgr.Instance.Exit();
+								OptionsMgr.Instance.Enter();
 							}
 							break;
 
-							case State.options:
+							case State.countdown:
 							{
-								ContainerMgr.Instance.Exit();
-								OptionsMgr.Instance.Enter();
+								OptionsMgr.Instance.SetActive(false);
 							}
 							break;
 						}
@@ -99,18 +111,40 @@ namespace GOD
 
 					case State.options:
 					{
+						OptionsMgr.Instance.Exit();
+
 						switch (state)
 						{
-							case State.idle:
+							case State.queue:
 							{
-								OptionsMgr.Instance.Exit();
+								ContainerMgr.Instance.Enter();
 							}
 							break;
 
+							case State.countdown:
+							{
+								OptionsMgr.Instance.SetActive(false);
+							}
+							break;
+						}
+					}
+					break;
+
+					case State.countdown:
+					{
+						OptionsMgr.Instance.SetActive(true);
+
+						switch (state)
+						{
 							case State.queue:
 							{
-								OptionsMgr.Instance.Exit();
 								ContainerMgr.Instance.Enter();
+							}
+							break;
+
+							case State.countdown:
+							{
+								OptionsMgr.Instance.Enter();
 							}
 							break;
 						}
@@ -127,11 +161,16 @@ namespace GOD
 			switch (m_state)
 			{
 				case State.queue:
+				{
 					ContainerMgr.Instance.EnableInput();
-					break;
+				}
+				break;
+
 				case State.options:
+				{
 					OptionsMgr.Instance.EnableInput();
-					break;
+				}
+				break;
 			}
 		}
 
@@ -140,11 +179,16 @@ namespace GOD
 			switch (m_state)
 			{
 				case State.queue:
+				{
 					ContainerMgr.Instance.DisableInput();
-					break;
+				}
+				break;
+
 				case State.options:
+				{
 					OptionsMgr.Instance.DisableInput();
-					break;
+				}
+				break;
 			}
 		}
 	}

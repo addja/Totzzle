@@ -171,14 +171,9 @@ namespace GOD
 
                 QueueEditorClose();
 
+                HUDMgr.Instance.SetState(HUDMgr.State.countdown);
+
                 AudioMgr.Instance.Play("Count down");
-            }
-            foreach (Item item in m_items)
-            {
-                if (item != null)
-                {
-                    item.StartCountdown();
-                }
             }
         }
 

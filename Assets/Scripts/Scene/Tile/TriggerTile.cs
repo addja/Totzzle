@@ -49,7 +49,6 @@ namespace GOD
             {
                 if (m_state == TriggerState.enabled)
                 {
-                    Debug.Log("Countdown on!");
                     m_state = TriggerState.triggered;
                     PuzzleMgr.Instance.StartCountdown();
                     m_particleSystem.Stop();
