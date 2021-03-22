@@ -19,10 +19,10 @@ namespace GOD
         {
             if (m_countDownEnabled && m_counter != 0)
             {
-                // TODO reactor to have more than minus one step
-                --m_counter;
+                // @todo: Maybe extract all of this logic?
+                m_counter += HUDMgr.Instance.GetQueueValue();
 
-                if (m_counter == 0)
+                if (m_counter <= 0)
                 {
                     if (PlayerMgr.Instance.transform.position == transform.position)
                     {

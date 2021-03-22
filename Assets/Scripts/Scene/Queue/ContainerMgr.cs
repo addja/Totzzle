@@ -19,6 +19,9 @@ namespace GOD
 		{
 			base.Awake();
 
+			enabledBorder.enabled	= false;
+			disabledBorder.enabled	= true;
+
 			if (m_containersFilledEvent == null)
 			{
 				m_containersFilledEvent = new UnityEvent();
@@ -38,7 +41,17 @@ namespace GOD
 		public List<ContainerSlot> GetContainers()
 		{
 			return m_Slots.ConvertAll<ContainerSlot>((Slot slot) => (ContainerSlot)slot);
-				}
+		}
+
+		public bool Contains(ContainerSlot container)
+		{
+			return GetContainers().Contains(container);
+		}
+
+		public bool TrueForAll(System.Predicate<ContainerSlot> match)
+		{
+			return GetContainers().TrueForAll(match);
+		}
 
 		public bool AreContainersFilled()
 		{
@@ -70,7 +83,7 @@ namespace GOD
 		private void CheckContainers()
 		{
 			SetContainersFilled(
-				GetContainers().TrueForAll(
+				TrueForAll(
 					(ContainerSlot container) => container.HasOption()
 				)
 			);

@@ -10,6 +10,13 @@ namespace GOD
 	{
 		protected ContainerSlot m_container;
 
+		protected override void Awake()
+		{
+			base.Awake();
+
+			m_container = null;
+		}
+
 		public ContainerSlot GetContainer()
 		{
 			return m_container;
@@ -26,13 +33,6 @@ namespace GOD
 		public bool HasContainer()
 		{
 			return (GetContainer() != null);
-		}
-
-		protected override void Awake()
-		{
-			base.Awake();
-
-			m_container = null;
 		}
 
 		protected override void OnClick()

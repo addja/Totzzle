@@ -10,6 +10,25 @@ namespace GOD
 	{
 		protected OptionSlot m_option;
 
+		protected override void Awake()
+		{
+			base.Awake();
+
+			m_option = null;
+		}
+
+		protected override void Update()
+		{
+			base.Update();
+
+			SetText(HasOption() ? m_option.m_value.ToString() : "");
+		}
+
+		public override int GetValue()
+		{
+			return HasOption() ? m_option.m_value : m_value;
+		}
+
 		public OptionSlot GetOption()
 		{
 			return m_option;
@@ -28,49 +47,39 @@ namespace GOD
 			return (GetOption() != null);
 		}
 
-		protected override void Awake()
-		{
-			base.Awake();
-
-			m_option = null;
-		}
-
-		protected override void Update()
-		{
-			base.Update();
-
-			SetText(m_option != null ? m_option.m_value.ToString() : "");
-		}
-
 		protected override void OnClick()
 		{
-			OptionsMgr	optionsMgr	= OptionsMgr.Instance;
-			OptionSlot	option		= optionsMgr.GetActiveOption();
+			OptionsMgr optionsMgr = OptionsMgr.Instance;
 
-			if (m_option == null)
+			if (optionsMgr != null)
 			{
-				if (option.HasContainer() && optionsMgr.HasNoContainerOptions())
-				{
-					OptionSlot noContainerOption = optionsMgr.GetNoContainerOption();
+				OptionSlot option = optionsMgr.GetActiveOption();
 
-					if (noContainerOption != null)
+				if (m_option == null)
+				{
+					if (option.HasContainer() && optionsMgr.HasNoContainerOptions())
 					{
-						option = noContainerOption;
+						OptionSlot noContainerOption = optionsMgr.GetNoContainerOption();
+
+						if (noContainerOption != null)
+						{
+							option = noContainerOption;
+						}
+					}
+
+					if (option.HasContainer())
+					{
+						option.GetContainer().SetOption(null);
 					}
 				}
-
-				if (option.HasContainer())
+				else
 				{
-					option.GetContainer().SetOption(null);
+					option = m_option;
 				}
-			}
-			else
-			{
-				option = m_option;
-			}
 
-			optionsMgr.SetActive(option);
-			HUDMgr.Instance.SetState(HUDMgr.State.options);
+				optionsMgr.SetActive(option);
+				HUDMgr.Instance.SetState(HUDMgr.State.options);
+			}
 		}
 	}
 }

@@ -36,6 +36,11 @@ namespace GOD
 			UpdateInteractable();
 		}
 
+		public virtual int GetValue()
+		{
+			return m_value;
+		}
+
 		public void Enable()
 		{
 			m_enabled = true;
@@ -45,7 +50,7 @@ namespace GOD
 		protected virtual void Update()
 		{
 			UpdateInteractable();
-			SetText(m_value.ToString());
+			SetText(GetValue().ToString());
 		}
 
 		public void Disable()
@@ -82,6 +87,11 @@ namespace GOD
 			return (m_autoselection != null && m_autoselection.gameObject == this.gameObject);
 		}
 
+		public bool IsInteractable()
+		{
+			return m_button.interactable;
+		}
+
 		public void EnableInput()
 		{
 			m_inputEnabled = true;
@@ -101,7 +111,7 @@ namespace GOD
 
 		protected void UpdateInteractable()
 		{
-			bool Interactable = (m_enabled && m_inputEnabled);
+			bool Interactable = ((m_enabled && m_inputEnabled) || IsSelected());
 
 			if (m_button.interactable != Interactable)
 			{

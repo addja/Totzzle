@@ -21,7 +21,7 @@ namespace GOD
         private PauseType m_currentPause = PauseType.none;
         private bool m_QueueOpened = false;
         private bool m_countdownStarted = false;
-        private bool m_countdownStartedProcessed = true;
+        private bool m_updatingWorld = false;
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;
@@ -45,8 +45,7 @@ namespace GOD
             {
                 Vector3 tilePosition = tile.transform.position;
                 m_tileMap[TileIdentifier(tilePosition.x, tilePosition.y)] = tile;
-                if (tile.m_type == Tile.TileType.trigger) {
-                    Assert.IsFalse(m_triggerTile); // We only want a triggerTiler per grid
+                if (tile is TriggerTile) {
                     m_triggerTile = (TriggerTile)tile;
                 }
             }
@@ -72,11 +71,11 @@ namespace GOD
             if (hudMgr.m_state != HUDMgr.State.idle)
             {
                 m_QueueOpened = true;
-                playerMgr.DisablePlayer();
+                playerMgr.DisableInput();
             }
             else
             {
-                playerMgr.EnablePlayer();
+                playerMgr.EnableInput();
             }
 
             hudMgr.m_queueLoadedEvent.AddListener(() => m_triggerTile.EnableTrigger());
@@ -88,7 +87,7 @@ namespace GOD
             if (m_QueueOpened)
             {
                 m_QueueOpened = false;
-                PlayerMgr.Instance.EnablePlayer();
+                PlayerMgr.Instance.EnableInput();
                 HUDMgr.Instance.SetState(HUDMgr.State.idle);
             }
         }
@@ -98,7 +97,7 @@ namespace GOD
             if (!m_QueueOpened && !m_countdownStarted)
             {
                 m_QueueOpened = true;
-                PlayerMgr.Instance.DisablePlayer();
+                PlayerMgr.Instance.DisableInput();
                 HUDMgr.Instance.SetState(HUDMgr.State.queue);
             }
         }
@@ -121,7 +120,7 @@ namespace GOD
                 direction *= PuzzleMgr.Instance.transform.localScale;
                 return CanMove(x+direction.x,y+direction.y);
             }
-                                 
+
             return true;
         }
 
@@ -144,30 +143,30 @@ namespace GOD
 
         public void UpdateWorld()
         {
+            m_updatingWorld = true;
+
             foreach (Tile tile in m_tileMap.Values)
             {
                 if (tile != null)
                 {
-                    tile.UpdateTile();
+                   tile.UpdateTile();
                 }
             }
 
-            if (!m_countdownStartedProcessed)
-            {
-                foreach (Tile tile in m_tileMap.Values)
-                {
-                    if (tile != null)
-                    {
-                        tile.StartCountdown();
-                    }
-                }
+            HUDMgr.Instance.UpdateWorld();
 
-                m_countdownStartedProcessed = true;
-            }
+            m_updatingWorld = false;
         }
 
         public void StartCountdown()
         {
+            StartCoroutine("StartCountdownInternal");
+        }
+
+        private IEnumerator StartCountdownInternal()
+        {
+            yield return new WaitWhile(() => m_updatingWorld);
+
             if (!m_countdownStarted)
             {
                 m_countdownStarted = true;
@@ -175,8 +174,6 @@ namespace GOD
                 QueueEditorClose();
 
                 HUDMgr.Instance.SetState(HUDMgr.State.countdown);
-
-                AudioMgr.Instance.Play("Count down");
 
                 foreach (Item item in m_items)
                 {
@@ -186,7 +183,13 @@ namespace GOD
                     }
                 }
 
-                m_countdownStartedProcessed = false;
+                foreach (Tile tile in m_tileMap.Values)
+                {
+                    if (tile != null)
+                    {
+                        tile.StartCountdown();
+                    }
+                }
             }
         }
 

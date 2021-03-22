@@ -54,14 +54,6 @@ namespace GOD
             }
         }
 
-        public void DisablePlayer() {
-            m_IsInputDisabled = true;
-        }
-
-        public void EnablePlayer() {
-            m_IsInputDisabled = false;
-        }
-
         public void DisableInput() {
             m_IsInputDisabled = true;
         }

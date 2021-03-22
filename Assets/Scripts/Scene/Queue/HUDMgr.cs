@@ -57,6 +57,25 @@ namespace GOD
 			containerMgr.m_containersUnfilledEvent.AddListener(() => m_queueUnloadedEvent.Invoke());
 		}
 
+		public void UpdateWorld()
+		{
+			switch (m_state)
+			{
+				case State.countdown:
+				{
+					ContainerMgr.Instance.NextActive();
+					ContainerMgr.Instance.GetActiveContainer().Select();
+					AudioMgr.Instance.Play("Count down");
+				}
+				break;
+			}
+		}
+
+		public int GetQueueValue()
+		{
+			return ContainerMgr.Instance.GetActiveContainer().GetValue();
+		}
+
 		public void SetState(State state)
 		{
 			if (m_state != state)
@@ -104,30 +123,6 @@ namespace GOD
 			}
 		}
 
-		private void ExitState(State state)
-		{
-			switch (state)
-			{
-				case State.queue:
-				{
-					ContainerMgr.Instance.Exit();
-				}
-				break;
-
-				case State.options:
-				{
-					OptionsMgr.Instance.Exit();
-				}
-				break;
-
-				case State.countdown:
-				{
-					OptionsMgr.Instance.SetActive(true);
-				}
-				break;
-			}
-		}
-
 		private void EnterState(State state)
 		{
 			switch (state)
@@ -147,6 +142,33 @@ namespace GOD
 				case State.countdown:
 				{
 					OptionsMgr.Instance.SetActive(false);
+					ContainerMgr.Instance.ResetActive();
+					ContainerMgr.Instance.GetActiveContainer().Select();
+				}
+				break;
+			}
+		}
+
+		private void ExitState(State state)
+		{
+			switch (state)
+			{
+				case State.queue:
+				{
+					ContainerMgr.Instance.Exit();
+				}
+				break;
+
+				case State.options:
+				{
+					OptionsMgr.Instance.Exit();
+				}
+				break;
+
+				case State.countdown:
+				{
+					OptionsMgr.Instance.SetActive(true);
+					ContainerMgr.Instance.ResetActive();
 				}
 				break;
 			}

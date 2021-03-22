@@ -552,7 +552,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -819,6 +819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416faaccce2413140a74fff197f6abc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_direction: 0
 --- !u!1 &6768375630000815017
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b00f01dfd74c59a499f7d67f4ea3e1c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_direction: 0
   enabledBorder: {fileID: 6010265213395793589}
   disabledBorder: {fileID: 7336249766742516313}
   m_containersFilledEvent:

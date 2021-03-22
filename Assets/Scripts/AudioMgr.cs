@@ -46,4 +46,16 @@ public class AudioMgr : Singleton<AudioMgr>
         Assert.IsNotNull(sound);
         sound.m_audioSource.Play();
     }
+
+    public void Stop(string soundName)
+    {
+        Sound sound = Array.Find(m_sounds, sound => sound.m_name == soundName);
+        Assert.IsNotNull(sound);
+        sound.m_audioSource.Stop();
+    }
+
+    public void Stop()
+    {
+        Array.ForEach(m_sounds, sound => sound.m_audioSource.Stop());
+    }
 }
