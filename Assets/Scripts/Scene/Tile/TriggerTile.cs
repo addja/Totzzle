@@ -24,7 +24,6 @@ namespace GOD
             base.Awake();
             m_state = TriggerState.disabled;
             m_type = TileType.trigger;
-            m_text.text = "B";
         }
 
         public void EnableTrigger() {

@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace GOD
 {
-    public class OriginTile : Tile
+    public class TargetTile : Tile
     {
         protected override void Awake() {
             m_tileAnimationCode = -1; // Used by parent Awake
             base.Awake();
             m_type = TileType.origin;
-            m_text.text = "A";
         }
         protected bool m_countDownEnabled = false;
 
