@@ -335,6 +335,15 @@ namespace GOD
 
             return SceneName;
         }
+
+        public CountdownTile GetCountdownTile(int x, int y)
+        {
+            Tile tile = m_tileMap[TileIdentifier(x, y)];
+            if (tile is CountdownTile) {
+                return (CountdownTile)tile;
+            }
+            return null;
+        }
     }
 
 }

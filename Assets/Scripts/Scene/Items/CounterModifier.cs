@@ -13,9 +13,16 @@ namespace GOD
         private Vector2 m_direction;
         private bool m_moving = false;
         public float m_timeToMove = 0.15f; // Needs to be smaller than player m_timeToMove to avoid bugs
+        public int m_value = 0;
 
         public override void StartCountdown()
         {
+            CountdownTile countdownTile = PuzzleMgr.Instance.GetCountdownTile(
+                (int)transform.position.x,(int)transform.position.y);
+            if (countdownTile != null)
+            {
+                countdownTile.m_counter += m_value;
+            }
             Destroy(gameObject);
         }
 
@@ -31,9 +38,6 @@ namespace GOD
                 m_direction = direction;
                 m_originalPosition = transform.position;
                 m_targetPosition = m_originalPosition + m_direction;
-                Debug.Log("Direction:" + direction);
-                Debug.Log("orig:" + m_originalPosition);
-                Debug.Log("target:" + m_targetPosition);
                 StartCoroutine(MoveCounterModifier());
             }
         }
@@ -56,7 +60,6 @@ namespace GOD
 
             // make sure there is no small jitter from lerp on final position
             transform.position = m_targetPosition;
-            Debug.Log("Final position" + transform.position);
             m_moving = false;
 
             // AudioMgr.Instance.Stop("CounterModifierMovement");
