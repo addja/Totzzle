@@ -44,15 +44,23 @@ namespace GOD
 
         public override void UpdateTile()
         {
-            if (PlayerMgr.Instance.transform.position == transform.position)
+            switch (m_state)
             {
-                if (m_state == TriggerState.enabled)
-                {
-                    m_state = TriggerState.triggered;
-                    PuzzleMgr.Instance.StartCountdown();
-                    m_particleSystem.Stop();
-                    AudioMgr.Instance.Play("Queue loaded");
-                }
+                case TriggerState.enabled:
+                    if (PlayerMgr.Instance.transform.position == transform.position)
+
+                    {
+                        m_state = TriggerState.triggered;
+                        PuzzleMgr.Instance.StartCountdown();
+                        m_particleSystem.Stop();
+                        AudioMgr.Instance.Play("Queue loaded");
+                    }
+                    break;
+                case TriggerState.triggered:
+                    Destroy(gameObject);
+                    break;
+                default:
+                    break;
             }
         }
     }
