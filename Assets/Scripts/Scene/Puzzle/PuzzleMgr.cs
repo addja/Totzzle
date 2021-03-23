@@ -104,12 +104,14 @@ namespace GOD
 
         public bool CanMove(float x, float y)
         {
+            WaitUntilEverythingIsIdle(); // Otherwise bugs related to items being in movement
+
             Tile tile;
-            m_tileMap.TryGetValue(TileIdentifier(x,y), out tile);
-            if (tile == null)
+            if(!m_tileMap.TryGetValue(TileIdentifier(x,y), out tile))
             {
-                return false;
-            };
+                return false; // Tile not in dictionary
+            }
+
             Item item = ItemInTile(x, y);
             if (item != null) {
                 if (!item.IsMovable()) {
@@ -122,6 +124,12 @@ namespace GOD
             }
 
             return true;
+        }
+
+        private IEnumerator WaitUntilEverythingIsIdle()
+        {
+            yield return new WaitWhile(() => m_items.TrueForAll((Item item) => item.IsIdle()));
+            yield return new WaitWhile(() => PlayerMgr.Instance.IsIdle());
         }
 
         private Item ItemInTile(float x, float y)

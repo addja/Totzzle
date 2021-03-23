@@ -11,9 +11,14 @@ namespace GOD
         private Vector2 m_originalPosition;
         private Vector2 m_targetPosition;
         private Vector2 m_direction;
-        private bool m_moving = false;
+        private bool m_idle = true;
         public float m_timeToMove = 0.15f; // Needs to be smaller than player m_timeToMove to avoid bugs
         public int m_value = 0;
+
+        public override bool IsIdle()
+        {
+            return !m_idle;
+        }
 
         public override void StartCountdown()
         {
@@ -33,7 +38,7 @@ namespace GOD
 
         public void Move(Vector2 direction)
         {
-            if (!m_moving)
+            if (m_idle)
             {
                 m_direction = direction;
                 m_originalPosition = transform.position;
@@ -46,7 +51,7 @@ namespace GOD
         {
             // AnimatePlayer(PlayerAnimation.move);
             float ellapsedTime = 0;
-            m_moving = true;
+            m_idle = false;
 
             // AudioMgr.Instance.Play("CounterModifierMovement");
 
@@ -60,7 +65,7 @@ namespace GOD
 
             // make sure there is no small jitter from lerp on final position
             transform.position = m_targetPosition;
-            m_moving = false;
+            m_idle = true;
 
             // AudioMgr.Instance.Stop("CounterModifierMovement");
         }

@@ -7,6 +7,7 @@ namespace GOD
         protected bool m_isMovable = false;
 
         public abstract void StartCountdown();
+        public abstract bool IsIdle();
 
         public bool IsMovable()
         {

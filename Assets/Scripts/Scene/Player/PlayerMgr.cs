@@ -9,13 +9,17 @@ namespace GOD
         public float m_timeToMove = .2f;
         public float m_timeInvalidAnim = .2f;
 
-        protected bool m_isBusy = false;
+        protected bool m_idle = true;
         protected Animator m_animator;
 
         protected bool m_IsInputDisabled = false;
         protected Vector2 m_origPosition;
         protected Vector2 m_targetPosition;
         protected Vector2 m_direction;
+
+        public bool IsIdle() {
+            return m_idle;
+        }
 
         public Vector2 MovementDirection() {
             return m_direction;
@@ -64,7 +68,7 @@ namespace GOD
 
         void Update()
         {
-            if (!m_isBusy && !m_IsInputDisabled)
+            if (m_idle && !m_IsInputDisabled)
             {
                 ProcessPlayerMovementInput();
             }
@@ -109,7 +113,7 @@ namespace GOD
 
             if (PuzzleMgr.Instance.CanMove(m_targetPosition.x, m_targetPosition.y))
             {
-                m_isBusy = true;
+                m_idle = false;
                 AnimatePlayer(PlayerAnimation.move);
                 float ellapsedTime = 0;
 
@@ -125,13 +129,13 @@ namespace GOD
                 // make sure there is no small jitter from lerp on final position
                 transform.position = m_targetPosition;
 
-                m_isBusy = false;
+                m_idle = true;
                 AnimatePlayer(PlayerAnimation.idle);
                 PuzzleMgr.Instance.UpdateWorld();
             } else {
                 AnimatePlayer(PlayerAnimation.invalid);
                 float ellapsedTime = 0;
-                m_isBusy = true;
+                m_idle = false;
 
                 AudioMgr.Instance.Play("InvalidMove");
 
@@ -140,7 +144,7 @@ namespace GOD
                     ellapsedTime += Time.deltaTime;
                     yield return null;
                 }
-                m_isBusy = false;
+                m_idle = true;
                 AnimatePlayer(PlayerAnimation.idle);
             }
         }
