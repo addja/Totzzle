@@ -25,14 +25,20 @@ namespace GOD
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
         private TriggerTile m_triggerTile;
-        
+
         // TODO: We can do better than a list efficy-wise
         // Leaving for the moment as we are focused on bring-up
-        private List<Item> m_items = new List<Item>(); 
+        private List<Item> m_items = new List<Item>();
 
         private string TileIdentifier(float x, float y)
         {
             return x.ToString() + "/" + y.ToString();
+        }
+
+        protected override void Awake() {
+            // Restart playing the them when entering on a level
+            AudioMgr.Instance.Stop("Theme");
+            AudioMgr.Instance.Play("Theme");
         }
 
         protected override void OnEnable()
