@@ -24,6 +24,18 @@ EditorBuildSettings:
     path: Assets/Scenes/UI/Lose.unity
     guid: 027b1cb582d60874f874e7cabb291587
   - enabled: 1
-    path: Assets/Scenes/Levels/Level1.unity
+    path: Assets/Scenes/Levels/dlevel.unity
     guid: 6611f4a498d052040a33eae473f6a92d
+  - enabled: 1
+    path: Assets/Scenes/Levels/Bear/1_Tutorial.unity
+    guid: 43d9c280528006c4aa98c0176bb4ca15
+  - enabled: 1
+    path: Assets/Scenes/Levels/Bear/2_TutorialTwist.unity
+    guid: ea324b2064076ca4da078f11a164c9d2
+  - enabled: 1
+    path: Assets/Scenes/Levels/Bear/3_LongerQueue.unity
+    guid: 49143cdd778853f4b9ccf0c23367c02f
+  - enabled: 1
+    path: Assets/Scenes/Levels/Bear/4_FirstItem.unity
+    guid: 75420cff9e17e724c8afecd1adf8ed2f
   m_configObjects: {}

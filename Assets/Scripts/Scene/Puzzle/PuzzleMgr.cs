@@ -118,6 +118,11 @@ namespace GOD
                 return false; // Tile not in dictionary
             }
 
+            if (tile == null)
+            {
+                return false;
+            }
+
             Item item = ItemInTile(x, y);
             if (item != null) {
                 if (!item.IsMovable()) {

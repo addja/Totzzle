@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 8808764629630703258}
   - component: {fileID: 8808764629630703263}
   m_Layer: 6
-  m_Name: OriginTile
+  m_Name: TargetTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -17,7 +17,7 @@ namespace GOD
 
         public override void UpdateTile()
         {
-            if (m_countDownEnabled && m_counter != 0)
+            if (m_countDownEnabled && m_counter >= 0)
             {
                 // @todo: Maybe extract all of this logic?
                 m_counter += HUDMgr.Instance.GetQueueValue();
