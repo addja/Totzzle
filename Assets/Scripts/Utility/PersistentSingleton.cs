@@ -37,26 +37,6 @@ public class PersistentSingleton<T> : MonoBehaviour where T : MonoBehaviour
 		else
 		{
 			Destroy(gameObject);
-			return;
 		}
-	}
-
-	protected virtual void OnEnable()
-	{
-		if (m_Instance == null)
-		{
-			// Search for existing instance.
-			m_Instance = (T)FindObjectOfType(typeof(T));
-		}
-		else if (m_Instance != this)
-		{
-			throw new UnityException("There cannot be more than one '" + typeof(T) +
-				"' script.  The instances are " + m_Instance.name + " and " + name + ".");
-		}
-	}
-
-	protected virtual void OnDisable()
-	{
-		m_Instance = null;
 	}
 }
