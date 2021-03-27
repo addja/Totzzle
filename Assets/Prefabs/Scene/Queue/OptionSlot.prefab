@@ -154,6 +154,14 @@ PrefabInstance:
       propertyPath: m_text
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 8765559431219705045, guid: 5b1c553fde88fda478f84776f7178167, type: 3}
+      propertyPath: m_Pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8765559431219705045, guid: 5b1c553fde88fda478f84776f7178167, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b1e381f033798f945b4931ea0c05e09a, type: 3}
     m_RemovedComponents:
     - {fileID: 5098001830825527579, guid: 5b1c553fde88fda478f84776f7178167, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b1c553fde88fda478f84776f7178167, type: 3}
