@@ -84,6 +84,7 @@ namespace GOD
                 playerMgr.EnableInput();
             }
 
+            hudMgr.m_queueLoadedEvent.AddListener(() => QueueEditorClose());
             hudMgr.m_queueLoadedEvent.AddListener(() => m_triggerTile.EnableTrigger());
             hudMgr.m_queueUnloadedEvent.AddListener(() => m_triggerTile.DisableTrigger());
         }
