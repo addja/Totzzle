@@ -396,10 +396,10 @@ MonoBehaviour:
 
     [W-A-S-D] move totem
 
-    [TAB] Open/close list
+    [TAB] open/close list
 
     [Enter]
-    Select list value
+    select list value
 
     [A-D] move in the list'
   m_isRightToLeft: 0

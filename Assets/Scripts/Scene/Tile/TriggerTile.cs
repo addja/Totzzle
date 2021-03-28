@@ -53,7 +53,6 @@ namespace GOD
                         m_state = TriggerState.triggered;
                         PuzzleMgr.Instance.StartCountdown();
                         m_particleSystem.Stop();
-                        AudioMgr.Instance.Play("Queue loaded");
                     }
                     break;
                 case TriggerState.triggered:
