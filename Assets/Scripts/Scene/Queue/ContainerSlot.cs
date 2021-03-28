@@ -21,12 +21,12 @@ namespace GOD
 		{
 			base.Update();
 
-			SetText(HasOption() ? m_option.m_value.ToString() : "");
+			SetText(HasOption() ? FormatValue(m_option.GetValue()) : "");
 		}
 
 		public override int GetValue()
 		{
-			return HasOption() ? m_option.m_value : m_value;
+			return HasOption() ? m_option.GetValue() : m_value;
 		}
 
 		public OptionSlot GetOption()

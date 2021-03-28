@@ -50,7 +50,7 @@ namespace GOD
 		protected virtual void Update()
 		{
 			UpdateInteractable();
-			SetText(GetValue().ToString());
+			SetText(FormatValue(GetValue()));
 		}
 
 		public void Disable()
@@ -107,6 +107,18 @@ namespace GOD
 		protected void SetText(string text)
 		{
 			m_text.text = text;
+		}
+
+		protected string FormatValue(int value)
+		{
+			string Suffix = "";
+
+			if (value > 0)
+			{
+				Suffix = "+";
+			}
+
+			return Suffix + value.ToString();
 		}
 
 		protected void UpdateInteractable()
