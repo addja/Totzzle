@@ -24,7 +24,6 @@ namespace GOD
         private bool m_updatingWorld = false;
 
         private Dictionary<string, Tile> m_tileMap = new Dictionary<string, Tile>();
-        private TriggerTile m_triggerTile;
 
         // TODO: We can do better than a list efficy-wise
         // Leaving for the moment as we are focused on bring-up
@@ -51,12 +50,7 @@ namespace GOD
             {
                 Vector3 tilePosition = tile.transform.position;
                 m_tileMap[TileIdentifier(tilePosition.x, tilePosition.y)] = tile;
-                if (tile is TriggerTile) {
-                    m_triggerTile = (TriggerTile)tile;
-                }
             }
-
-            Assert.IsTrue(m_triggerTile); // We need one triggerTile per grid
 
             GameObject items = transform.Find("Items").gameObject;
             Assert.IsTrue(items);
@@ -85,8 +79,16 @@ namespace GOD
             }
 
             hudMgr.m_queueLoadedEvent.AddListener(() => QueueEditorClose());
-            hudMgr.m_queueLoadedEvent.AddListener(() => m_triggerTile.EnableTrigger());
-            hudMgr.m_queueUnloadedEvent.AddListener(() => m_triggerTile.DisableTrigger());
+
+            foreach (Tile tile in m_tileMap.Values)
+            {
+                if (tile is TriggerTile)
+                {
+                    TriggerTile triggerTile = (TriggerTile)tile;
+                    hudMgr.m_queueLoadedEvent.AddListener(() => triggerTile.EnableTrigger());
+                    hudMgr.m_queueUnloadedEvent.AddListener(() => triggerTile.DisableTrigger());
+                }
+            }
         }
 
         public void QueueEditorClose()

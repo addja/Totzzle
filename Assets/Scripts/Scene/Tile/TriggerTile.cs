@@ -13,7 +13,7 @@ namespace GOD
             enabled,
             triggered,
         };
-        private TriggerState m_state;
+        private static TriggerState m_state;
         private ParticleSystem m_particleSystem;
 
         protected override void Awake() {
@@ -48,11 +48,8 @@ namespace GOD
             {
                 case TriggerState.enabled:
                     if (PlayerMgr.Instance.transform.position == transform.position)
-
                     {
-                        m_state = TriggerState.triggered;
                         PuzzleMgr.Instance.StartCountdown();
-                        m_particleSystem.Stop();
                     }
                     break;
                 case TriggerState.triggered:
@@ -61,6 +58,12 @@ namespace GOD
                 default:
                     break;
             }
+        }
+
+        public override void StartCountdown()
+        {
+            m_state = TriggerState.triggered;
+            m_particleSystem.Stop();
         }
     }
 }
