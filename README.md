@@ -53,10 +53,10 @@
 
 
 <p align="justify">
-	Once upon a time there was a big pandemic in the world! During those times Guille and Daniel were stuck at home watching cool GDC videos about game design and cool programming tricks on games. One thing let to another and this is the result. It took about three months of spare time to bring up this small game. The goal was to come up with an idea, generate a finished product using only home brewed elements and learn as much as possible in the process.
+	Once upon a time there was a big pandemic! During those times Guille and Daniel were stuck at home watching cool GDC videos about game design and cool programming tricks on games. One thing let to another and this is the result. It took about three months of spare time to bring up this small game. The goal was to come up with an idea, generate a finished product using only home brewed elements and learn as much as possible in the process.
 	<br />
 	<br />
-	The brave adventurers didn't produce the audio and font in the end (but they are leaning music production for the next ones ;) ) since new exciting ideas allured them to start another project. There was a lot of fun and rest assure more are yet to come! 
+	The brave adventurers didn't produce the audio and font in the end (but they are leaning music production for the next ones ;) ) since new exciting ideas lured them to start another project. They are working on the next one and rest assured more excitement is yet to come! 
 	<br />
 	<br />
 	<br />
