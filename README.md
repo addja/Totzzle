@@ -13,21 +13,21 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/addja/GOD">
-    <img src="Documentation/Images/Logo.png" alt="Logo" width="74" height="118">
+  <a href="https://github.com/addja/Totzzle">
+    <img src="Documentation/Images/Logo.png" alt="Logo" width="200" height="200">
   </a>
 
-  <h3 align="center">GOD</h3>
+  <h3 align="center">Totzzle</h3>
 
   <p align="center">
     yadda, yadda, yadda
     <br />
-    <a href="https://github.com/addja/GOD"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/addja/Totzzle"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/addja/GOD/issues">Report Bug</a>
+    <a href="https://github.com/addja/Totzzle/issues">Report Bug</a>
     ·
-    <a href="https://github.com/addja/GOD/issues">Request Feature</a>
+    <a href="https://github.com/addja/Totzzle/issues">Request Feature</a>
   </p>
 </p>
 
@@ -49,7 +49,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Screenshot][product-screenshot]](https://github.com/addja/GOD)
+[![Screenshot][product-screenshot]](https://github.com/addja/Totzzle)
 
 <p align="center">
     Once upon a time...
@@ -64,7 +64,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1. Download the [latest release](https://github.com/addja/GOD/archive/main.zip).
+1. Download the [latest release](https://github.com/addja/Totzzle/archive/main.zip).
 2. Refer to the [Unity Development with VS Code](https://code.visualstudio.com/docs/other/unity) documentation.
 3. Enjoy!
 
@@ -74,9 +74,9 @@
 ## Contact
 
 
-D - [addja](https://github.com/addja)
+Daniel Otero Avalle - [addja](https://github.com/addja)
 <br />
-G - [Kv0the](https://github.com/Kv0the)
+Guillermo Ojeda Noda - [Kv0the](https://github.com/Kv0the)
 
 
 
@@ -88,10 +88,10 @@ G - [Kv0the](https://github.com/Kv0the)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/addja/GOD.svg?style=for-the-badge
-[contributors-url]: https://github.com/addja/GOD/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/addja/GOD.svg?style=for-the-badge
-[stars-url]: https://github.com/addja/GOD/stargazers
-[issues-shield]: https://img.shields.io/github/issues/addja/GOD.svg?style=for-the-badge
-[issues-url]: https://github.com/addja/GOD/issues
+[contributors-shield]: https://img.shields.io/github/contributors/addja/Totzzle.svg?style=for-the-badge
+[contributors-url]: https://github.com/addja/Totzzle/graphs/contributors
+[stars-shield]: https://img.shields.io/github/stars/addja/Totzzle.svg?style=for-the-badge
+[stars-url]: https://github.com/addja/Totzzle/stargazers
+[issues-shield]: https://img.shields.io/github/issues/addja/Totzzle.svg?style=for-the-badge
+[issues-url]: https://github.com/addja/Totzzle/issues
 [product-screenshot]: Documentation/Images/Screenshot.png
