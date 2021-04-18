@@ -20,7 +20,7 @@
   <h3 align="center">Totzzle</h3>
 
   <p align="center">
-    yadda, yadda, yadda
+    2D Puzzle game with Totems
     <br />
     <a href="https://github.com/addja/Totzzle"><strong>Explore the docs »</strong></a>
     <br />
@@ -51,11 +51,17 @@
 
 [![Screenshot][product-screenshot]](https://github.com/addja/Totzzle)
 
+
+<p align="justify">
+	Once upon a time there was a big pandemic in the world! During those times Guille and Daniel were stuck at home watching cool GDC videos about game design and cool programming tricks on games. One thing let to another and this is the result. It took about three months of spare time to bring up this small game. The goal was to come up with an idea, generate a finished product using only home brewed elements and learn as much as possible in the process.
+	<br />
+	<br />
+	The brave adventurers didn't produce the audio and font in the end (but they are leaning music production for the next ones ;) ) since new exciting ideas allured them to start another project. There was a lot of fun and rest assure more are yet to come! 
+	<br />
+	<br />
+	<br />
+</p>
 <p align="center">
-    Once upon a time...
-    <br />
-    <br />
-    <br />
     <img src="Documentation/Images/Unity.png" alt="Made with" width="551" height="300"/>
 </p>
 
@@ -64,8 +70,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1. Download the [latest release](https://github.com/addja/Totzzle/archive/main.zip).
-2. Refer to the [Unity Development with VS Code](https://code.visualstudio.com/docs/other/unity) documentation.
+1. Download the [latest release](https://github.com/addja/Totzzle/archive/main.zip) or go [here](http://addja.github.io/bin/totzzle/) to play online (remember to click the fullscreen button to get the best experience!).
 3. Enjoy!
 
 
