@@ -81,7 +81,7 @@
 
 Daniel Otero Avalle - [addja](https://github.com/addja)
 <br />
-Guillermo Ojeda Noda - [Kv0the](https://github.com/Kv0the)
+Guillermo Ojeda Noda - [kek1us](https://github.com/kek1us)
 
 
 
